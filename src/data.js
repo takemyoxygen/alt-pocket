@@ -46,3 +46,26 @@ export async function getArticles() {
 
   return compose(convertData, sortBy(x => x.sort_id), values)(data.list);
 }
+
+export async function archive(articleId) {
+  const body = {
+    consumer_key: CONSUMER_KEY,
+    access_token: requireAccessToken(),
+    actions: [{
+      action: 'archive',
+      item_id: articleId
+    }]
+  }
+
+  const response = await fetch(corsProxy('https://getpocket.com/v3/send'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  const articles = await getArticles();
+
+  return response.ok ? articles.filter(a => a.id !== articleId) : articles;
+}

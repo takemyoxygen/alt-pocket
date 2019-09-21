@@ -4,9 +4,13 @@
 }
 
 .articles-list__article {
-  padding: 8px 0;
+  padding: 8px;
   display: flex;
   align-items: center;
+}
+
+.articles-list__article:hover {
+  background: #e6f3ff;
 }
 
 .articles-list__article__title-link {
@@ -16,6 +20,17 @@
 
 .articles-list__article__icons {
   margin-left: 8px;
+  display: flex;
+}
+
+.articles-list__article__icons svg {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+
+.articles-list__article__icons svg:hover {
+  opacity: 0.7;
 }
 
 .articles-list__article__open-icon-link {
