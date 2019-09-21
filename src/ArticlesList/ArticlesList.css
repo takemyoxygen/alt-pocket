@@ -1,0 +1,25 @@
+.articles-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.articles-list__article {
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+.articles-list__article__title-link {
+  color: black;
+  text-decoration: none;
+}
+
+.articles-list__article__icons {
+  margin-left: 8px;
+}
+
+.articles-list__article__open-icon-link {
+  color: black;
+  display: flex;
+  align-items: center;
+}

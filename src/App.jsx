@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import ArticlesList from './ArticlesList/ArticlesList';
 
 function App() {
   return (
-    <div>
-      <header>Alt Pocket</header>
+    <div className="app">
+      <ArticlesList/>
     </div>
   );
 }

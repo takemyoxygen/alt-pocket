@@ -1,10 +1,11 @@
-const CONSUMER_KEY = process.env.REACT_APP_API_CONSUMER_KEY;
+import {corsProxy} from './ajax';
+
+export const CONSUMER_KEY = process.env.REACT_APP_API_CONSUMER_KEY;
+
 const HOME = 'http://localhost:3000';
 const ACCESS_TOKEN_KEY = 'access-token';
 
 const redirectUrl = code => code ? `${HOME}/auth?code=${code}` : `${HOME}/auth`;
-
-const corsProxy = url => `https://cors-anywhere.herokuapp.com/${url}`
 
 async function getRequestToken() {
   const requestBody = {
