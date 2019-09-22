@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {archive, getArticles} from '../data';
+import {archive, DataStore} from '../data';
 import './ArticlesList.css';
 import Article from './Article';
+import PropTypes from 'prop-types';
 
-export default () => {
+function ArticlesList({dataStore}) {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    getArticles().then(setArticles);
-  }, []);
+    return dataStore.subscribe(a => a.unread, setArticles);
+  }, [dataStore]);
 
   function onArchive(articleId) {
-    archive(articleId).then(setArticles);
+    archive(articleId, dataStore);
   }
 
   return (
@@ -22,3 +23,9 @@ export default () => {
     </div>
   );
 }
+
+ArticlesList.propTypes = {
+  dataStore: PropTypes.instanceOf(DataStore).isRequired
+}
+
+export default ArticlesList;
