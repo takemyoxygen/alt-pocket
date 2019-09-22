@@ -16,6 +16,10 @@
 .articles-list__article__title-link {
   color: black;
   text-decoration: none;
+  flex: 1 1 auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .articles-list__article__icons {

@@ -1,3 +1,9 @@
 .app {
-  padding: 20px 100px;
+  width: 800px;
+}
+
+.app-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
