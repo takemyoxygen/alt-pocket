@@ -1,7 +1,7 @@
 import {CONSUMER_KEY, requireAccessToken} from './auth';
 import {corsProxy} from './ajax';
 import {sortBy, values, compose, map} from 'lodash/fp';
-import {uniqueId} from 'lodash';
+import {uniqueId, forEach} from 'lodash';
 
 async function fetchArticlesData(since = undefined) {
   const body = {
@@ -94,52 +94,91 @@ export async function archive(articleId, dataStore) {
   });
 }
 
+const storageFor = key => ({
+  get() {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : null;
+  },
+
+  set(val) {
+    localStorage.setItem(key, JSON.stringify(val));
+  },
+
+  clear() {
+    localStorage.removeItem(key);
+  }
+})
+
 export class DataStore {
-  constructor(initialData) {
-    this.cachedRawData = initialData.list;
-    this.cachedConvertedData = convertData(initialData.list);
-    this.since = initialData.since;
-    this.subscriptions = {};
+  constructor(storage, fetchData) {
+    this._storage = storage;
+
+    const stored = storage.get();
+    this._cachedRawData = stored || {list: {}};
+    this._cachedConvertedData = convertData(this._cachedRawData.list);
+    this._subscriptions = {};
+    this._fetchData = fetchData;
+
+    this._sync();
   }
 
   subscribe(filter, callback) {
     const key = uniqueId('data-subscription');
     const subscription = {filter, callback};
-    this.subscriptions[key] = subscription;
+    this._subscriptions[key] = subscription;
 
     setTimeout(() => this._notify(subscription), 0);
 
     return () => {
-      delete this.subscriptions[key];
+      delete this._subscriptions[key];
     };
   }
 
   _notify({filter, callback}) {
-    callback(this.cachedConvertedData.filter(filter));
+    callback(this._cachedConvertedData.filter(filter));
   }
 
   _notifyAll() {
-    values(this.subscriptions)
+    values(this._subscriptions)
       .forEach(subscription => this._notify(subscription));
   }
 
   update(f) {
-    this.cachedRawData = f(this.cachedRawData);
-    this.cachedConvertedData = convertData(this.cachedRawData);
+    this._cachedRawData.list = f(this._cachedRawData.list);
+    this._cachedConvertedData = convertData(this._cachedRawData.list);
 
     setTimeout(() => this._notifyAll(), 0);
-    // todo re-fetch all data from the service;
+
+    this._sync();
+  }
+
+  async _sync() {
+    const updates = await this._fetchData(this._cachedRawData.since);
+
+    const newData = {
+      ...updates,
+      list: {...this._cachedRawData.list}
+    };
+
+    forEach(updates.list, (val, key) => {
+      if (val.status.toString() === "2") {
+        delete newData.list[key];
+      } else {
+        newData.list[key] = val;
+      }
+    })
+
+    this._cachedRawData = newData;
+    this._cachedConvertedData = convertData(newData.list);
+
+    this._storage.set(newData);
+
+    setTimeout(() => this._notifyAll(), 0);
   }
 
   static async create() {
-    const storedArticles = localStorage.getItem('articles-data');
-    if (storedArticles) {
-      return new DataStore(JSON.parse(storedArticles));
-    }
+    const storage = storageFor('articles-data');
 
-    const loadedArticles = await fetchArticlesData();
-    localStorage.setItem('articles-data', JSON.stringify(loadedArticles));
-
-    return new DataStore(loadedArticles);
+    return new DataStore(storage, fetchArticlesData);
   }
 }
