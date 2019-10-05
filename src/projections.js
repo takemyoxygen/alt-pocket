@@ -10,6 +10,12 @@ export const archived = {
   ordering: article => -article.archivedAt
 };
 
+export const favorite = {
+  title: 'Favorite',
+  filter: article => article.favorite,
+  ordering: article => -article.favoritedAt,
+}
+
 unread.incompatibleWith = [archived]
 archived.incompatibleWith = [unread]
 

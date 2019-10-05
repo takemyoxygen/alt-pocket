@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import {unread, archived, combine} from '../projections';
+import {unread, archived, combine, favorite} from '../projections';
 import './ArticlesProjections.css';
 
-const projections = [unread, archived];
+const projections = [unread, archived, favorite];
 
 const ArticleProjections = ({defaultProjection, onProjectionChanged}) => {
   const [selectedProjections, setSelectedProjections] = useState([defaultProjection]);

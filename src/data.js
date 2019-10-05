@@ -33,6 +33,7 @@ const mapArticles = map(article => {
   const title = article.resolved_title || article.given_title || url;
   const cite = new URL(url).host;
   const status = parseInt(article.status);
+  const favorite = parseInt(article.favorite);
 
   return {
     title,
@@ -40,6 +41,7 @@ const mapArticles = map(article => {
     cite,
     unread: status === 0,
     archived: status === 1,
+    favorite: favorite !== 0,
     id: article.item_id,
     addedAt: convertDate(article.time_added),
     archivedAt: convertDate(article.time_read),
