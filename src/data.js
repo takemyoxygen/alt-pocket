@@ -136,8 +136,10 @@ export class DataStore {
 
     setTimeout(() => this._notify(subscription), 0);
 
-    return () => {
-      delete this._subscriptions[key];
+    return {
+      unsubscribe:() => {
+        delete this._subscriptions[key]
+      }
     };
   }
 

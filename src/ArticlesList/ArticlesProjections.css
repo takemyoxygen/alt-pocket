@@ -1,0 +1,24 @@
+.articles-projections {
+  display: flex;
+  padding-top: 8px;
+  justify-content: space-around;
+}
+
+.articles-projections__projection {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 1.2em;
+}
+
+.articles-projections__projection:hover {
+  background: #D1D1D1;
+}
+
+.articles-projections__projection--selected {
+  background: black;
+  color: white;
+}
+
+.articles-projections__projection--selected:hover {
+  background: #676767;
+}
