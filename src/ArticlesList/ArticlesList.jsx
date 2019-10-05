@@ -3,12 +3,13 @@ import {archive, DataStore} from '../data';
 import './ArticlesList.css';
 import Article from './Article';
 import PropTypes from 'prop-types';
+import {unread} from './../projections';
 
 function ArticlesList({dataStore}) {
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
-    return dataStore.subscribe(a => a.unread, setArticles);
+    return dataStore.subscribe(unread, setArticles);
   }, [dataStore]);
 
   function onArchive(articleId) {

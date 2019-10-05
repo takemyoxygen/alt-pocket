@@ -1,6 +1,6 @@
 import {CONSUMER_KEY, requireAccessToken} from './auth';
 import {corsProxy} from './ajax';
-import {sortBy, values, compose, map} from 'lodash/fp';
+import {sortBy, values, compose, map, filter} from 'lodash/fp';
 import {uniqueId, forEach} from 'lodash';
 
 async function fetchArticlesData(since = undefined) {
@@ -8,7 +8,6 @@ async function fetchArticlesData(since = undefined) {
     access_token: requireAccessToken(),
     consumer_key: CONSUMER_KEY,
     detailType: 'complete',
-    sort: 'newest',
     state: 'all',
     since
   }
@@ -24,6 +23,11 @@ async function fetchArticlesData(since = undefined) {
   return response.json();
 }
 
+function convertDate(apiDate) {
+  const apiDateAsNumber = parseInt(apiDate);
+  return apiDateAsNumber ? new Date(apiDateAsNumber * 1000) : null;
+}
+
 const mapArticles = map(article => {
   const url = article.resolved_url || article.given_url;
   const title = article.resolved_title || article.given_title || url;
@@ -36,7 +40,10 @@ const mapArticles = map(article => {
     cite,
     unread: status === 0,
     archived: status === 1,
-    id: article.item_id
+    id: article.item_id,
+    addedAt: convertDate(article.time_added),
+    archivedAt: convertDate(article.time_read),
+    favoritedAt: convertDate(article.time_favorited)
   };
 })
 
@@ -122,9 +129,9 @@ export class DataStore {
     this._sync();
   }
 
-  subscribe(filter, callback) {
+  subscribe(projection, callback) {
     const key = uniqueId('data-subscription');
-    const subscription = {filter, callback};
+    const subscription = {projection, callback};
     this._subscriptions[key] = subscription;
 
     setTimeout(() => this._notify(subscription), 0);
@@ -134,8 +141,11 @@ export class DataStore {
     };
   }
 
-  _notify({filter, callback}) {
-    callback(this._cachedConvertedData.filter(filter));
+  _notify({projection, callback}) {
+    compose(
+      callback,
+      sortBy(projection.ordering),
+      filter(projection.filter))(this._cachedConvertedData);
   }
 
   _notifyAll() {
