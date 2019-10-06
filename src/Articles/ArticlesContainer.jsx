@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, useMemo} from 'react';
+import React, {useEffect, useState, useRef, useMemo, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import ArticleProjections from './ArticlesProjections';
 import ArticlesList from './ArticlesList';
@@ -16,13 +16,13 @@ function useDataStoreProjectionSubscription(dataStore, initialProjection) {
     return () => subscriptionRef.current && subscriptionRef.current.unsubscribe();
   }, [dataStore, subscriptionRef, initialProjection]);
 
-  function onProjectionChanged(projection) {
-    if (subscriptionRef.current) {
-      subscriptionRef.current.unsubscribe();
-    }
+  const onProjectionChanged = useCallback(projection => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+      }
 
-    subscriptionRef.current = dataStore.subscribe(projection, setArticles);
-  }
+      subscriptionRef.current = dataStore.subscribe(projection, setArticles);
+    }, [subscriptionRef, dataStore]);
 
   return [articles, onProjectionChanged];
 }

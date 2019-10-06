@@ -1,6 +1,9 @@
 .articles-projections {
-  display: flex;
   padding-top: 8px;
+}
+
+.quick-projections {
+  display: flex;
   justify-content: space-around;
 }
 
@@ -21,4 +24,13 @@
 
 .articles-projections__projection--selected:hover {
   background: #676767;
+}
+
+.text-filter-projection {
+  padding: 8px;
+}
+
+.text-filter-projection__input {
+  width: 100%;
+  font-size: 1.1em;
 }
