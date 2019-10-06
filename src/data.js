@@ -86,21 +86,38 @@ async function sendCommands(commands) {
   return response.json();
 }
 
-export async function archive(articleId, dataStore) {
-  await sendCommands([{
-    action: 'archive',
-    item_id: articleId
-  }]);
-
-  dataStore.update(data => {
+function updateStatus(articleId, status) {
+  return data => {
     const archived = data[articleId];
 
     if (archived) {
-      archived.status = 1; // :(
+      archived.status = status; // :(
     }
 
     return data;
-  });
+  }
+}
+
+export function createOperations(dataStore) {
+  return {
+    async archive({id}) {
+      await sendCommands([{
+        action: 'archive',
+        item_id: id
+      }]);
+
+      dataStore.update(updateStatus(id, "1"));
+    },
+
+    async readd({id}) {
+      await sendCommands([{
+        action: 'readd',
+        item_id: id
+      }]);
+
+      dataStore.update(updateStatus(id, "0"))
+    }
+  }
 }
 
 const storageFor = key => ({

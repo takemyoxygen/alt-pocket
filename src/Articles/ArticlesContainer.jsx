@@ -1,8 +1,8 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import ArticleProjections from './ArticlesProjections';
 import ArticlesList from './ArticlesList';
-import {archive, DataStore} from '../data';
+import {DataStore, createOperations} from '../data';
 import {unread} from '../projections';
 
 const defaultProjection = unread;
@@ -29,15 +29,12 @@ function useDataStoreProjectionSubscription(dataStore, initialProjection) {
 
 function ArticlesContainer({dataStore}) {
   const [articles, onProjectionChanged] = useDataStoreProjectionSubscription(dataStore, defaultProjection);
-
-  function onArchive(article) {
-    archive(article.id, dataStore);
-  }
+  const operations = useMemo(() => createOperations(dataStore), [dataStore]);
 
   return (
     <div>
       <ArticleProjections onProjectionChanged={onProjectionChanged} defaultProjection={unread}/>
-      <ArticlesList articles={articles} archive={onArchive}/>
+      <ArticlesList articles={articles} operations={operations}/>
     </div>
   )
 }

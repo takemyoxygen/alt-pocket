@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MdOpenInNew, MdArchive} from 'react-icons/md';
+import {MdOpenInNew, MdArchive, MdUnarchive} from 'react-icons/md';
 
-const Article = ({article, archive}) =>
+const Article = ({article, operations}) =>
   <article className="articles-list__article">
     <a
       className="articles-list__article__title-link"
@@ -24,14 +24,16 @@ const Article = ({article, archive}) =>
         <MdOpenInNew/>
       </a>
 
-      <MdArchive title="Archive" onClick={() => archive(article)}/>
+      {article.archived
+        ? <MdUnarchive title="Unarchive" onClick={() => operations.readd(article)} />
+        : <MdArchive title="Archive" onClick={() => operations.archive(article)}/>}
     </div>
 
   </article>;
 
 Article.propTypes = {
   article: PropTypes.object.isRequired,
-  archive: PropTypes.func.isRequired
+  operations: PropTypes.object.isRequired
 }
 
 export default Article;
