@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import ArticlesList from './ArticlesList/ArticlesList';
 import {authorized} from './auth';
 import {DataStore} from './data';
+import ArticlesContainer from './Articles/ArticlesContainer';
 
 function App() {
   const [dataStore, setDataStore] = useState(null);
@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="app">
-        {dataStore ? <ArticlesList dataStore={dataStore}/> : null}
+        {dataStore ? <ArticlesContainer dataStore={dataStore}/> : null}
       </div>
     </div>
   );

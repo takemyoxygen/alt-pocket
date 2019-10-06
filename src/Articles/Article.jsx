@@ -24,7 +24,7 @@ const Article = ({article, archive}) =>
         <MdOpenInNew/>
       </a>
 
-      <MdArchive title="Archive" onClick={() => archive(article.id)}/>
+      <MdArchive title="Archive" onClick={() => archive(article)}/>
     </div>
 
   </article>;
