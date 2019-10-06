@@ -86,36 +86,71 @@ async function sendCommands(commands) {
   return response.json();
 }
 
-function updateStatus(articleId, status) {
-  return data => {
-    const archived = data[articleId];
+async function sendCommand(command, id) {
+  return sendCommands([{
+    action: command,
+    item_id: id
+  }]);
+}
 
-    if (archived) {
-      archived.status = status; // :(
+function updateArticle(articleId, update) {
+  return data => {
+    const article = data[articleId];
+
+    if (!article) {
+      return data
     }
 
-    return data;
+    return {
+      ...data,
+      [articleId]: update(article)
+    };
   }
+}
+
+function updateStatus(articleId, status) {
+  return updateArticle(articleId, article => ({
+    ...article,
+    status
+  }));
 }
 
 export function createOperations(dataStore) {
   return {
     async archive({id}) {
-      await sendCommands([{
-        action: 'archive',
-        item_id: id
-      }]);
-
+      await sendCommand('archive', id);
       dataStore.update(updateStatus(id, "1"));
     },
 
     async readd({id}) {
-      await sendCommands([{
-        action: 'readd',
-        item_id: id
-      }]);
-
+      await sendCommand('readd', id);
       dataStore.update(updateStatus(id, "0"))
+    },
+
+    async delete({id}) {
+      await sendCommand('delete', id);
+
+      dataStore.update(data => {
+        const copy = {...data};
+        delete copy[id];
+        return copy;
+      });
+    },
+
+    async favorite({id}) {
+      await sendCommand('favorite', id);
+      dataStore.update(updateArticle(id, article => ({
+        ...article,
+        favorite: "1"
+      })));
+    },
+
+    async unfavorite({id}) {
+      await sendCommand('unfavorite', id);
+      dataStore.update(updateArticle(id, article => ({
+        ...article,
+        favorite: "0"
+      })));
     }
   }
 }

@@ -1,6 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {MdOpenInNew, MdArchive, MdUnarchive} from 'react-icons/md';
+import {MdOpenInNew, MdArchive, MdUnarchive, MdStar, MdStarBorder, MdDelete} from 'react-icons/md';
+
+function confirmDelete(performDelete) {
+  return () => {
+    if (window.confirm("This item will be permanently deleted. Are you sure?")) {
+      performDelete();
+    }
+  }
+}
 
 const Article = ({article, operations}) =>
   <article className="articles-list__article">
@@ -27,6 +35,12 @@ const Article = ({article, operations}) =>
       {article.archived
         ? <MdUnarchive title="Unarchive" onClick={() => operations.readd(article)} />
         : <MdArchive title="Archive" onClick={() => operations.archive(article)}/>}
+
+      {article.favorite
+        ? <MdStar title="Unfavorite" onClick={() => operations.unfavorite(article)}/>
+        : <MdStarBorder title={"Favorite"} onClick={() => operations.favorite(article)}/>}
+
+      <MdDelete title="Delete" onClick={confirmDelete(() => operations.delete(article))}/>
     </div>
 
   </article>;
