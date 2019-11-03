@@ -1,7 +1,7 @@
 import {CONSUMER_KEY, requireAccessToken} from './auth';
 import {corsProxy} from './ajax';
 import {sortBy, values, compose, map, filter} from 'lodash/fp';
-import {uniqueId, forEach} from 'lodash';
+import {uniqueId, forEach, without} from 'lodash';
 
 async function fetchArticlesData(since = undefined) {
   const body = {
@@ -88,10 +88,11 @@ async function sendCommands(commands) {
   return response.json();
 }
 
-async function sendCommand(command, id) {
+async function sendCommand(command, id, payload = {}) {
   return sendCommands([{
     action: command,
-    item_id: id
+    item_id: id,
+    ...payload
   }]);
 }
 
@@ -161,6 +162,16 @@ export function createOperations(dataStore) {
         })),
         () => sendCommand('unfavorite', id)
       );
+    },
+
+    removeTag({id}, tag) {
+      return dataStore.update(
+        updateArticle(id, article => ({
+          ...article,
+          tags: without(article.tags, tag)
+        })),
+        () => sendCommand('tags_remove', id, {tags: tag})
+      )
     }
   }
 }

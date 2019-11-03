@@ -22,7 +22,13 @@ const Article = ({article, operations}) =>
       {article.title}
     </a>
 
-    {article.tags ? <Tags names={article.tags}/> : null}
+    {article.tags ?
+      <Tags
+        onClick={() => {}}
+        onRemove={tag => operations.removeTag(article, tag)}
+        names={article.tags}
+      />
+      : null}
 
     <div className="articles-list__article__icons">
       <a

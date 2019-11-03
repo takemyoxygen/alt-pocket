@@ -9,4 +9,12 @@
   padding: 0 4px 1px 4px;
   font-size: 0.9em;
   white-space: nowrap;
+  display: flex;
+}
+
+.tag__icon {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+  cursor: pointer;
 }
