@@ -34,18 +34,20 @@ const mapArticles = map(article => {
   const cite = new URL(url).host;
   const status = parseInt(article.status);
   const favorite = parseInt(article.favorite);
+  const tags = compose(map(tagInfo => tagInfo.tag), values)(article.tags);
 
   return {
     title,
     url,
     cite,
+    tags,
     unread: status === 0,
     archived: status === 1,
     favorite: favorite !== 0,
     id: article.item_id,
     addedAt: convertDate(article.time_added),
     archivedAt: convertDate(article.time_read),
-    favoritedAt: convertDate(article.time_favorited)
+    favoritedAt: convertDate(article.time_favorited),
   };
 })
 

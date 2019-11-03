@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {MdOpenInNew, MdArchive, MdUnarchive, MdStar, MdStarBorder, MdDelete} from 'react-icons/md';
+import Tags from '../Tags/Tags';
 
 function confirmDelete(performDelete) {
   return () => {
@@ -20,6 +21,8 @@ const Article = ({article, operations}) =>
     >
       {article.title}
     </a>
+
+    {article.tags ? <Tags names={article.tags}/> : null}
 
     <div className="articles-list__article__icons">
       <a
