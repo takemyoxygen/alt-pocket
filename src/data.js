@@ -117,40 +117,48 @@ function updateStatus(articleId, status) {
 
 export function createOperations(dataStore) {
   return {
-    async archive({id}) {
-      await sendCommand('archive', id);
-      dataStore.update(updateStatus(id, "1"));
+    archive({id}) {
+      return dataStore.update(
+        updateStatus(id, '1'),
+        () => sendCommand('archive', id)
+      )
     },
 
-    async readd({id}) {
-      await sendCommand('readd', id);
-      dataStore.update(updateStatus(id, "0"))
+    readd({id}) {
+      return dataStore.update(
+        updateStatus(id, "0"),
+        () => sendCommand('readd', id)
+      );
     },
 
-    async delete({id}) {
-      await sendCommand('delete', id);
-
-      dataStore.update(data => {
-        const copy = {...data};
-        delete copy[id];
-        return copy;
-      });
+    delete({id}) {
+      return dataStore.update(
+        data => {
+          const copy = {...data};
+          delete copy[id];
+          return copy;
+        },
+        () => sendCommand('delete', id));
     },
 
-    async favorite({id}) {
-      await sendCommand('favorite', id);
-      dataStore.update(updateArticle(id, article => ({
-        ...article,
-        favorite: "1"
-      })));
+    favorite({id}) {
+      return dataStore.update(
+        updateArticle(id, article => ({
+          ...article,
+          favorite: "1"
+        })),
+        () => sendCommand('favorite', id)
+      );
     },
 
-    async unfavorite({id}) {
-      await sendCommand('unfavorite', id);
-      dataStore.update(updateArticle(id, article => ({
-        ...article,
-        favorite: "0"
-      })));
+    unfavorite({id}) {
+      return dataStore.update(
+        updateArticle(id, article => ({
+          ...article,
+          favorite: "0"
+        })),
+        () => sendCommand('unfavorite', id)
+      );
     }
   }
 }
@@ -209,11 +217,13 @@ export class DataStore {
       .forEach(subscription => this._notify(subscription));
   }
 
-  update(f) {
-    this._cachedRawData.list = f(this._cachedRawData.list);
+  async update(optimistic, remote) {
+    this._cachedRawData.list = optimistic(this._cachedRawData.list);
     this._cachedConvertedData = convertData(this._cachedRawData.list);
 
     setTimeout(() => this._notifyAll(), 0);
+
+    await remote();
 
     this._sync();
   }
