@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import './ArticlesList.css';
 import Article from './Article';
 
-function ArticlesList({articles, operations}) {
+function ArticlesList({articles, operations, onTagClick}) {
   return (
     <div className="articles-list">
       {articles.map(article => (
-        <Article key={article.id} article={article} operations={operations}/>
+        <Article key={article.id} article={article} operations={operations} onTagClick={onTagClick}/>
       ))}
     </div>
   );
@@ -15,7 +15,8 @@ function ArticlesList({articles, operations}) {
 
 ArticlesList.propTypes = {
   articles: PropTypes.array.isRequired,
-  operations: PropTypes.object.isRequired
+  operations: PropTypes.object.isRequired,
+  onTagClick: PropTypes.func.isRequired
 }
 
 export default ArticlesList;

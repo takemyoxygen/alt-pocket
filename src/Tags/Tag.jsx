@@ -6,7 +6,7 @@ import {GoX} from 'react-icons/go';
 const Tag = ({name, onRemove, onClick}) => (
   <div className="tag">
     <div onClick={() => onClick(name)}>{name}</div>
-    <div className="tag__icon" onClick={() => onRemove(name)}><GoX/></div>
+    <div title="Delete tag" className="tag__icon" onClick={() => onRemove(name)}><GoX/></div>
   </div>
 );
 

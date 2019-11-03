@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ArticleProjections from './ArticlesProjections';
 import ArticlesList from './ArticlesList';
 import {DataStore, createOperations} from '../data';
-import {unread} from '../projections';
+import {combine, unread} from '../projections';
 
 const defaultProjection = unread;
 
@@ -16,25 +16,25 @@ function useDataStoreProjectionSubscription(dataStore, initialProjection) {
     return () => subscriptionRef.current && subscriptionRef.current.unsubscribe();
   }, [dataStore, subscriptionRef, initialProjection]);
 
-  const onProjectionChanged = useCallback(projection => {
+  const onProjectionsChanged = useCallback(projections => {
       if (subscriptionRef.current) {
         subscriptionRef.current.unsubscribe();
       }
 
-      subscriptionRef.current = dataStore.subscribe(projection, setArticles);
+      subscriptionRef.current = dataStore.subscribe(combine(projections), setArticles);
     }, [subscriptionRef, dataStore]);
 
-  return [articles, onProjectionChanged];
+  return [articles, onProjectionsChanged];
 }
 
 function ArticlesContainer({dataStore}) {
-  const [articles, onProjectionChanged] = useDataStoreProjectionSubscription(dataStore, defaultProjection);
+  const [articles, onProjectionsChanged] = useDataStoreProjectionSubscription(dataStore, defaultProjection);
   const operations = useMemo(() => createOperations(dataStore), [dataStore]);
 
   return (
     <div>
-      <ArticleProjections onProjectionChanged={onProjectionChanged} defaultProjection={unread}/>
-      <ArticlesList articles={articles} operations={operations}/>
+      <ArticleProjections onProjectionsChanged={onProjectionsChanged} defaultProjection={unread}/>
+      <ArticlesList articles={articles} operations={operations} onTagClick={() => {}}/>
     </div>
   )
 }

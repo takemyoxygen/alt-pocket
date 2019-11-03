@@ -11,7 +11,7 @@ function confirmDelete(performDelete) {
   }
 }
 
-const Article = ({article, operations}) =>
+const Article = ({article, operations, onTagClick}) =>
   <article className="articles-list__article">
     <a
       className="articles-list__article__title-link"
@@ -24,7 +24,7 @@ const Article = ({article, operations}) =>
 
     {article.tags ?
       <Tags
-        onClick={() => {}}
+        onClick={onTagClick}
         onRemove={tag => operations.removeTag(article, tag)}
         names={article.tags}
       />
@@ -56,7 +56,8 @@ const Article = ({article, operations}) =>
 
 Article.propTypes = {
   article: PropTypes.object.isRequired,
-  operations: PropTypes.object.isRequired
+  operations: PropTypes.object.isRequired,
+  onTagClick: PropTypes.func.isRequired
 }
 
 export default Article;

@@ -1,19 +1,19 @@
 import React, {useState, useMemo, useEffect} from 'react';
 import {throttle, compact} from 'lodash';
 import PropTypes from 'prop-types';
-import {unread, archived, combine, favorite, textFilter} from '../projections';
+import {unread, archived, favorite, textFilter} from '../projections';
 import './ArticlesProjections.css';
 
 const quickProjections = [unread, archived, favorite];
 
-const ArticleProjections = ({defaultProjection, onProjectionChanged}) => {
+const ArticleProjections = ({defaultProjection, onProjectionsChanged}) => {
   const [selectedQuickProjections, setSelectedQuickProjections] = useState([defaultProjection]);
   const [textFilterProjection, setTextFilterProjection] = useState(null);
   const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
-    onProjectionChanged(combine(compact([...selectedQuickProjections, textFilterProjection])));
-  }, [onProjectionChanged, selectedQuickProjections, textFilterProjection]);
+    onProjectionsChanged(compact([...selectedQuickProjections, textFilterProjection]));
+  }, [onProjectionsChanged, selectedQuickProjections, textFilterProjection]);
 
   function toggleQuickProjection(projection, currentlySelected) {
     let newSelectedProjections = currentlySelected
@@ -29,7 +29,7 @@ const ArticleProjections = ({defaultProjection, onProjectionChanged}) => {
   }
 
   const updateTextFilterProjection = useMemo(() => throttle(text => {
-    setTextFilterProjection(textFilter(text));
+    setTextFilterProjection(text ? textFilter(text) : null);
   }, 300), [])
 
   function onFilterTextChange(evt) {
@@ -70,7 +70,7 @@ const ArticleProjections = ({defaultProjection, onProjectionChanged}) => {
 }
 
 ArticleProjections.propTypes = {
-  onProjectionChanged: PropTypes.func.isRequired,
+  onProjectionsChanged: PropTypes.func.isRequired,
   defaultProjection: PropTypes.object.isRequired
 }
 
