@@ -28,7 +28,7 @@ function convertDate(apiDate) {
   return apiDateAsNumber ? new Date(apiDateAsNumber * 1000) : null;
 }
 
-const mapArticles = map(article => {
+export function mapArticle(article) {
   const url = article.resolved_url || article.given_url;
   const title = article.resolved_title || article.given_title || url;
   const cite = new URL(url).host;
@@ -49,22 +49,9 @@ const mapArticles = map(article => {
     archivedAt: convertDate(article.time_read),
     favoritedAt: convertDate(article.time_favorited),
   };
-})
-
-export async function getArticles() {
-  let data = localStorage.getItem('articles-data');
-
-  if (data) {
-    data = JSON.parse(data);
-  } else {
-    data = await fetchArticlesData();
-    localStorage.setItem('articles-data', JSON.stringify(data));
-  }
-
-  return compose(mapArticles, sortBy(x => x.sort_id), values)(data.list);
 }
 
-const convertData = compose(mapArticles, sortBy(x => x.sort_id), values);
+const convertData = compose(map(mapArticle), sortBy(x => x.sort_id), values);
 
 async function sendCommands(commands) {
   const body = {
@@ -191,6 +178,8 @@ const storageFor = key => ({
   }
 })
 
+export const localDataStorage = storageFor('articles-data')
+
 export class DataStore {
   constructor(storage, fetchData) {
     this._storage = storage;
@@ -266,8 +255,6 @@ export class DataStore {
   }
 
   static async create() {
-    const storage = storageFor('articles-data');
-
-    return new DataStore(storage, fetchArticlesData);
+    return new DataStore(localDataStorage, fetchArticlesData);
   }
 }
