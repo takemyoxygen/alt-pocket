@@ -1,27 +1,6 @@
-import {CONSUMER_KEY, requireAccessToken} from './auth';
-import {corsProxy} from './ajax';
-import {sortBy, values, compose, map, filter} from 'lodash/fp';
-import {uniqueId, forEach, without} from 'lodash';
-
-async function fetchArticlesData(since = undefined) {
-  const body = {
-    access_token: requireAccessToken(),
-    consumer_key: CONSUMER_KEY,
-    detailType: 'complete',
-    state: 'all',
-    since
-  }
-
-  const response = await fetch(corsProxy('https://getpocket.com/v3/get'),{
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-
-  return response.json();
-}
+import {compose, filter, map, sortBy, values} from 'lodash/fp';
+import {forEach, uniqueId, without} from 'lodash';
+import {fetchArticlesData, sendCommand} from './apiClient';
 
 function convertDate(apiDate) {
   const apiDateAsNumber = parseInt(apiDate);
@@ -52,36 +31,6 @@ export function mapArticle(article) {
 }
 
 const convertData = compose(map(mapArticle), sortBy(x => x.sort_id), values);
-
-async function sendCommands(commands) {
-  const body = {
-    consumer_key: CONSUMER_KEY,
-    access_token: requireAccessToken(),
-    actions: commands
-  }
-
-  const response = await fetch(corsProxy('https://getpocket.com/v3/send'), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to execute commands. ${response.status} - ${response.statusText}`);
-  }
-
-  return response.json();
-}
-
-async function sendCommand(command, id, payload = {}) {
-  return sendCommands([{
-    action: command,
-    item_id: id,
-    ...payload
-  }]);
-}
 
 function updateArticle(articleId, update) {
   return data => {

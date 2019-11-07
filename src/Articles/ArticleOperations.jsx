@@ -24,14 +24,14 @@ const ArticleOperations = ({article, favorite, unfavorite, archive, readd, remov
     </a>
 
     {article.archived
-      ? <MdUnarchive title="Unarchive" onClick={() => readd(article)}/>
-      : <MdArchive title="Archive" onClick={() => archive(article)}/>}
+      ? <MdUnarchive title="Unarchive" onClick={() => readd([article])}/>
+      : <MdArchive title="Archive" onClick={() => archive([article])}/>}
 
     {article.favorite
-      ? <MdStar title="Unfavorite" onClick={() => unfavorite(article)}/>
-      : <MdStarBorder title={"Favorite"} onClick={() => favorite(article)}/>}
+      ? <MdStar title="Unfavorite" onClick={() => unfavorite([article])}/>
+      : <MdStarBorder title={"Favorite"} onClick={() => favorite([article])}/>}
 
-    <MdDelete title="Delete" onClick={confirmDelete(() => remove(article))}/>
+    <MdDelete title="Delete" onClick={confirmDelete(() => remove([article]))}/>
   </div>
 )
 

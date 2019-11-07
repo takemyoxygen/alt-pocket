@@ -1,8 +1,11 @@
 import {actionTypes} from './actions';
-import {mapValues} from 'lodash'
+import {mapValues, keyBy} from 'lodash'
+import {unread} from './projections';
 
 export const initialState = {
-
+  articles: {},
+  since: null,
+  projections: [unread]
 }
 
 export default function (state, action) {
@@ -10,7 +13,17 @@ export default function (state, action) {
     case actionTypes.INIT: {
       return {
         ...state,
-        articles: action.articles
+        articles: action.articles,
+        since: action.since
+      }
+    }
+    case actionTypes.UPDATE_ARTICLES: {
+      return {
+        ...state,
+        articles: {
+          ...state.articles,
+          ...keyBy(action.articles, a => a.id)
+        }
       }
     }
     case actionTypes.ARCHIVE: {
