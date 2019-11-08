@@ -12,7 +12,7 @@ export const actionTypes = {
 }
 
 async function syncArticles(since, dispatch) {
-  const articlesData = apiClient.fetchArticlesData(since);
+  const articlesData = await apiClient.fetchArticlesData(since);
   const [deleted, updated] = partition(values(articlesData.list), a => a.status.toString() === '2');
   if (deleted.length > 0) {
     console.log('Dispatching delete');
@@ -43,15 +43,9 @@ async function updateArticles(dispatch, articles, updateLocal, updateRemote, sin
 const pickIds = xs => xs.map(x => x.id);
 
 export default {
-  initialize: () => async (dispatch, getState) => {
-    if (authorized()) {
-      const localData = localDataStorage.get();
-      if (localData) {
-        const articles = mapValues(localData.list, mapArticle)
-        dispatch({type: actionTypes.INIT, articles, since: localData.since});
-      }
-      await syncArticles(getState().since, dispatch);
-    }
+  initialize: (initState) => async (dispatch, getState) => {
+    dispatch({type: actionTypes.INIT, state: initState});
+    await syncArticles(getState().since, dispatch);
   },
 
   archive: articles => (dispatch, getState) => updateArticles(

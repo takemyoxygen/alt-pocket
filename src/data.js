@@ -129,6 +129,8 @@ const storageFor = key => ({
 
 export const localDataStorage = storageFor('articles-data')
 
+export const stateStorage = storageFor('articles-state');
+
 export class DataStore {
   constructor(storage, fetchData) {
     this._storage = storage;

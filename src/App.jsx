@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import {authorized} from './auth';
-import {DataStore} from './data';
+import {DataStore, stateStorage} from './data';
 import ArticlesContainer from './Articles/ArticlesContainer';
 import {applyMiddleware, createStore} from 'redux';
 import reducer, {initialState} from './reducer';
@@ -9,23 +9,24 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {logger} from 'redux-logger';
 import actions from './actions';
+import {throttle} from 'lodash';
 
 const store = createStore(reducer, initialState, applyMiddleware(thunk, logger));
 
-function App() {
-  const [dataStore, setDataStore] = useState(null);
+const pickPersistableState = ({articles, since}) => ({articles, since});
 
+function App() {
   const isAuthorized = authorized();
 
   useEffect(() => {
-    store.dispatch(actions.initialize());
-  }, []);
-
-  useEffect(() => {
     if (isAuthorized) {
-      DataStore.create().then(setDataStore);
-    } else {
-      setDataStore(null);
+      const persistedState = stateStorage.get() || {articles: []};
+      store.dispatch(actions.initialize(persistedState));
+
+      store.subscribe(throttle(() => {
+        const state = store.getState();
+        stateStorage.set(pickPersistableState(state));
+      }, 1000));
     }
   }, [isAuthorized]);
 
@@ -33,7 +34,7 @@ function App() {
     <Provider store={store}>
       <div className="app-container">
         <div className="app">
-          {dataStore ? <ArticlesContainer dataStore={dataStore}/> : null}
+          <ArticlesContainer />
         </div>
       </div>
     </Provider>

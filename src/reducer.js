@@ -13,13 +13,13 @@ export default function (state, action) {
     case actionTypes.INIT: {
       return {
         ...state,
-        articles: action.articles,
-        since: action.since
+        ...action.state
       }
     }
     case actionTypes.UPDATE_ARTICLES: {
       return {
         ...state,
+        since: action.since,
         articles: {
           ...state.articles,
           ...keyBy(action.articles, a => a.id)
