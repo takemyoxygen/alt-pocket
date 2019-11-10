@@ -1,5 +1,5 @@
 import {compose, filter, map, sortBy, values} from 'lodash/fp';
-import {forEach, uniqueId, without} from 'lodash';
+import {forEach, uniqueId, without, mapValues} from 'lodash';
 import {fetchArticlesData, sendCommand} from './apiClient';
 
 function convertDate(apiDate) {
@@ -125,11 +125,47 @@ const storageFor = key => ({
   clear() {
     localStorage.removeItem(key);
   }
-})
+});
 
 export const localDataStorage = storageFor('articles-data')
 
-export const stateStorage = storageFor('articles-state');
+const inner = storageFor('articles-state');
+
+export const stateStorage = {
+  get() {
+    const data = inner.get();
+    return data.articles
+      ? {
+        ...data,
+        articles: mapValues(data.articles, article => ({
+          ...article,
+          addedAt: article.addedAt ? new Date(article.addedAt) : null,
+          favoritedAt: article.favoritedAt ? new Date(article.favoritedAt) : null,
+          archivedAt: article.archivedAt ? new Date(article.archivedAt) : null
+        }))
+      }
+      : data;
+  },
+
+  set(data) {
+    const converted = data.articles
+      ? {
+        ...data,
+        articles: mapValues(data.articles, article => ({
+          ...article,
+          addedAt: article.addedAt ? article.addedAt.getTime() : null,
+          favoritedAt: article.favoritedAt ? article.favoritedAt.getTime() : null,
+          archivedAt: article.archivedAt ? article.archivedAt.getTime() : null
+        }))
+      }
+      : data;
+
+      inner.set(converted);
+  },
+
+  clear: () => inner.clear()
+};
+
 
 export class DataStore {
   constructor(storage, fetchData) {
