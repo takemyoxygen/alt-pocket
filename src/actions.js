@@ -1,7 +1,7 @@
-import {mapArticle} from './data';
+import {mapArticle} from './data/converter';
 import {partition, values} from 'lodash';
 import {compose} from 'lodash/fp';
-import * as apiClient from './apiClient'
+import * as apiClient from './data/apiClient'
 
 export const actionTypes = {
   INIT: 'init',

@@ -1,5 +1,5 @@
-import {CONSUMER_KEY, requireAccessToken} from './auth';
-import {corsProxy} from './ajax';
+import {CONSUMER_KEY, requireAccessToken} from '../auth';
+import {corsProxy} from '../ajax';
 
 export async function fetchArticlesData(since = undefined) {
   const body = {

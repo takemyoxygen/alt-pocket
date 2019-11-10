@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {authorized} from './auth';
-import {DataStore, stateStorage} from './data';
+import {stateStorage} from './data/storage';
 import ArticlesContainer from './Articles/ArticlesContainer';
 import {applyMiddleware, createStore} from 'redux';
 import reducer, {initialState} from './reducer';
