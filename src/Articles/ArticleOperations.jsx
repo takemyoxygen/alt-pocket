@@ -37,5 +37,9 @@ const ArticleOperations = ({article, favorite, unfavorite, archive, readd, remov
 
 export default connect(null,
   {
-    archive: actions.archive
+    archive: actions.archive,
+    readd: actions.readd,
+    favorite: actions.favorite,
+    unfavorite: actions.unfavorite,
+    remove: actions.remove
   })(ArticleOperations);

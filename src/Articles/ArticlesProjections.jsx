@@ -1,5 +1,5 @@
-import React, {useState, useMemo} from 'react';
-import {throttle, } from 'lodash';
+import React, {useState, useMemo, useRef, useEffect} from 'react';
+import {throttle, find} from 'lodash';
 import PropTypes from 'prop-types';
 import {quickProjections, textFilter} from '../projections';
 import './ArticlesProjections.css';
@@ -8,18 +8,26 @@ import actions from './../actions';
 
 const ArticleProjections = ({projections, onProjectionToggled}) => {
   const [filterText, setFilterText] = useState('');
+  const textProjectionRef = useRef();
+
+  useEffect(() => {
+    textProjectionRef.current = find(projections, p => p.type === 'text');
+  }, [projections, textProjectionRef]);
 
   function toggleQuickProjection(projection, activated) {
     onProjectionToggled(projection, !activated);
   }
 
   const updateTextFilterProjection = useMemo(() => throttle(text => {
-    onProjectionToggled(text ? textFilter(text) : null, !!text);
-  }, 300), [onProjectionToggled])
+    if (text) {
+      onProjectionToggled(textFilter(text), true);
+    } else if (textProjectionRef.current) {
+      onProjectionToggled(textProjectionRef.current, false);
+    }
+  }, 300), [onProjectionToggled, textProjectionRef])
 
   function onFilterTextChange(evt) {
     setFilterText(evt.target.value);
-
     updateTextFilterProjection(evt.target.value);
   }
 

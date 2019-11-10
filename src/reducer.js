@@ -1,5 +1,5 @@
 import {actionTypes} from './actions';
-import {mapValues, keyBy, without} from 'lodash'
+import {mapValues, keyBy, without, omit} from 'lodash'
 import {unread} from './projections';
 
 const defaultProjection = unread;
@@ -27,7 +27,14 @@ export default function (state, action) {
           ...state.articles,
           ...keyBy(action.articles, a => a.id)
         }
-      }
+      };
+    }
+
+    case actionTypes.DELETE_ARTICLES: {
+      return {
+        ...state,
+        articles: omit(state.articles, action.articleIds)
+      };
     }
 
     case actionTypes.ARCHIVE: {
@@ -38,7 +45,7 @@ export default function (state, action) {
           article => action.articleIds.indexOf(article.id) === -1
             ? article
             : {...article, archived: true, unread: false})
-      }
+      };
     }
 
     case actionTypes.TOGGLE_PROJECTION: {
@@ -51,9 +58,13 @@ export default function (state, action) {
           ]
         : without(state.projections, action.projection);
 
+      if (!newProjections.some(p => p.type === 'quick')) {
+        newProjections.splice(0, 0, defaultProjection);
+      }
+
       return {
         ...state,
-        projections: newProjections.length > 0 ? newProjections : [defaultProjection]
+        projections: newProjections
       };
     }
 
