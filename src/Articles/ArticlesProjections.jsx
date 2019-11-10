@@ -1,40 +1,33 @@
-import React, {useState, useMemo, useEffect} from 'react';
-import {throttle, compact} from 'lodash';
+import React, {useState, useMemo, useRef, useEffect} from 'react';
+import {throttle, find} from 'lodash';
 import PropTypes from 'prop-types';
-import {unread, archived, favorite, textFilter} from '../projections';
+import {quickProjections, textFilter} from '../projections';
 import './ArticlesProjections.css';
+import {connect} from 'react-redux';
+import actions from './../actions';
 
-const quickProjections = [unread, archived, favorite];
-
-const ArticleProjections = ({defaultProjection, onProjectionsChanged}) => {
-  const [selectedQuickProjections, setSelectedQuickProjections] = useState([defaultProjection]);
-  const [textFilterProjection, setTextFilterProjection] = useState(null);
+const ArticleProjections = ({projections, onProjectionToggled}) => {
   const [filterText, setFilterText] = useState('');
+  const textProjectionRef = useRef();
 
   useEffect(() => {
-    onProjectionsChanged(compact([...selectedQuickProjections, textFilterProjection]));
-  }, [onProjectionsChanged, selectedQuickProjections, textFilterProjection]);
+    textProjectionRef.current = find(projections, p => p.type === 'text');
+  }, [projections, textProjectionRef]);
 
-  function toggleQuickProjection(projection, currentlySelected) {
-    let newSelectedProjections = currentlySelected
-      ? selectedQuickProjections.filter(pr => pr !== projection)
-      : [...selectedQuickProjections, projection]
-        .filter(pr => !projection.incompatibleWith || projection.incompatibleWith.indexOf(pr) === -1);
-
-    if (newSelectedProjections.length === 0) {
-      newSelectedProjections = [defaultProjection];
-    }
-
-    setSelectedQuickProjections(newSelectedProjections);
+  function toggleQuickProjection(projection, activated) {
+    onProjectionToggled(projection, !activated);
   }
 
   const updateTextFilterProjection = useMemo(() => throttle(text => {
-    setTextFilterProjection(text ? textFilter(text) : null);
-  }, 300), [])
+    if (text) {
+      onProjectionToggled(textFilter(text), true);
+    } else if (textProjectionRef.current) {
+      onProjectionToggled(textProjectionRef.current, false);
+    }
+  }, 300), [onProjectionToggled, textProjectionRef])
 
   function onFilterTextChange(evt) {
     setFilterText(evt.target.value);
-    console.log('text change');
     updateTextFilterProjection(evt.target.value);
   }
 
@@ -42,7 +35,7 @@ const ArticleProjections = ({defaultProjection, onProjectionsChanged}) => {
     <div className="articles-projections">
       <div className="quick-projections">
         {quickProjections.map(pr => {
-          const selected = selectedQuickProjections.indexOf(pr) >= 0;
+          const selected = projections.indexOf(pr) >= 0;
           return (
             <div
               key={pr.title}
@@ -70,8 +63,12 @@ const ArticleProjections = ({defaultProjection, onProjectionsChanged}) => {
 }
 
 ArticleProjections.propTypes = {
-  onProjectionsChanged: PropTypes.func.isRequired,
-  defaultProjection: PropTypes.object.isRequired
+  onProjectionToggled: PropTypes.func.isRequired,
+  projections: PropTypes.array.isRequired
 }
 
-export default ArticleProjections;
+export default connect(
+    state => ({projections: state.projections}),
+    dispatch => ({onProjectionToggled: (projection, enabled) => dispatch(actions.toggleProjection(projection, enabled))}))(
+      ArticleProjections
+  );

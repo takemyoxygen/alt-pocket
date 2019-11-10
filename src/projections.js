@@ -1,30 +1,36 @@
 import {compact} from 'lodash';
 
 export const unread = {
+  type: 'quick',
   title: 'Unread',
   filter: article => article.unread,
-  ordering: article => -article.addedAt
+  ordering: article => -article.addedAt,
+  incompatibleWith: another => another === archived
 };
 
 export const archived = {
+  type: 'quick',
   title: 'Archived',
   filter: article => article.archived,
-  ordering: article => -article.archivedAt
+  ordering: article => -article.archivedAt,
+  incompatibleWith: another => another === unread
 };
 
 export const favorite = {
+  type: 'quick',
   title: 'Favorite',
   filter: article => article.favorite,
   ordering: article => -article.favoritedAt,
 }
 
-unread.incompatibleWith = [archived];
-archived.incompatibleWith = [unread];
+export const quickProjections = [unread, archived, favorite];
 
 export function textFilter(text) {
   return {
+    type: 'text',
     title: 'Filter by text',
-    filter: article => !text || article.title.toLowerCase().indexOf(text.toLowerCase()) >= 0
+    filter: article => !text || article.title.toLowerCase().indexOf(text.toLowerCase()) >= 0,
+    incompatibleWith: another => another.type === 'text'
   }
 }
 
