@@ -1,6 +1,5 @@
-import {authorized} from './auth';
-import {localDataStorage, mapArticle} from './data';
-import {mapValues, partition, values} from 'lodash';
+import {mapArticle} from './data';
+import {partition, values} from 'lodash';
 import {compose} from 'lodash/fp';
 import * as apiClient from './apiClient'
 
@@ -8,7 +7,8 @@ export const actionTypes = {
   INIT: 'init',
   ARCHIVE: 'archive',
   UPDATE_ARTICLES: 'articles:update',
-  DELETE_ARTICLES: 'articles:delete'
+  DELETE_ARTICLES: 'articles:delete',
+  TOGGLE_PROJECTION: 'projection:toggle'
 }
 
 async function syncArticles(since, dispatch) {
@@ -46,6 +46,10 @@ export default {
   initialize: (initState) => async (dispatch, getState) => {
     dispatch({type: actionTypes.INIT, state: initState});
     await syncArticles(getState().since, dispatch);
+  },
+
+  toggleProjection(projection, enabled) {
+    return {type: actionTypes.TOGGLE_PROJECTION, projection, enabled};
   },
 
   archive: articles => (dispatch, getState) => updateArticles(

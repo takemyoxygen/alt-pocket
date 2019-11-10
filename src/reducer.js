@@ -1,11 +1,13 @@
 import {actionTypes} from './actions';
-import {mapValues, keyBy} from 'lodash'
+import {mapValues, keyBy, without} from 'lodash'
 import {unread} from './projections';
+
+const defaultProjection = unread;
 
 export const initialState = {
   articles: {},
   since: null,
-  projections: [unread]
+  projections: [defaultProjection]
 }
 
 export default function (state, action) {
@@ -16,6 +18,7 @@ export default function (state, action) {
         ...action.state
       }
     }
+
     case actionTypes.UPDATE_ARTICLES: {
       return {
         ...state,
@@ -26,6 +29,7 @@ export default function (state, action) {
         }
       }
     }
+
     case actionTypes.ARCHIVE: {
       return {
         ...state,
@@ -36,6 +40,23 @@ export default function (state, action) {
             : {...article, archived: true, unread: false})
       }
     }
+
+    case actionTypes.TOGGLE_PROJECTION: {
+      const newProjections = action.enabled
+        ? [
+            ...(action.projection.incompatibleWith
+                ? state.projections.filter(p => !action.projection.incompatibleWith(p))
+                : state.projections),
+             action.projection
+          ]
+        : without(state.projections, action.projection);
+
+      return {
+        ...state,
+        projections: newProjections.length > 0 ? newProjections : [defaultProjection]
+      };
+    }
+
     default:
       return state
   }
