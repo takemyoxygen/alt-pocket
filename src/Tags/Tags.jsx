@@ -11,7 +11,7 @@ const Tags = ({names, onClick, onRemove}) => (
 
 Tags.propTypes = {
   names: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   onRemove: PropTypes.func.isRequired
 };
 

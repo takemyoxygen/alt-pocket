@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import './ArticlesList.css';
 import Article from './Article';
 import {connect} from 'react-redux';
-import {combine} from '../projections';
+import {combine, tagFilter} from '../projections';
+import actions from './../actions';
 import {values, filter, sortBy, compose} from 'lodash/fp';
 
 function ArticlesList({articles, operations, onTagClick}) {
@@ -29,4 +30,6 @@ export default connect(({articles, projections}) => {
     filter(combinedProjection.filter),
     values)(articles);
   return {articles: projectedArticles};
+}, {
+  onTagClick: tag => actions.toggleProjection(tagFilter(tag), true)
 })(ArticlesList);

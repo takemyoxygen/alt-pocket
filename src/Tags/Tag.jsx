@@ -10,9 +10,13 @@ const Tag = ({name, onRemove, onClick}) => (
   </div>
 );
 
+Tag.defaultProps = {
+  onClick: () => {}
+}
+
 Tag.propTypes = {
   name: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   onRemove: PropTypes.func.isRequired
 };
 

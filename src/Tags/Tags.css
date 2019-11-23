@@ -10,11 +10,19 @@
   font-size: 0.9em;
   white-space: nowrap;
   display: flex;
+  cursor: pointer;
+}
+
+.tag:not(:last-child) {
+  margin-right: 8px;
 }
 
 .tag__icon {
   display: flex;
   align-items: center;
   margin-left: 4px;
-  cursor: pointer;
+}
+
+.tag__icon:hover {
+  opacity: 0.6;
 }

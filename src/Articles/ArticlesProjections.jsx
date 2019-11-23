@@ -5,10 +5,12 @@ import {quickProjections, textFilter} from '../projections';
 import './ArticlesProjections.css';
 import {connect} from 'react-redux';
 import actions from './../actions';
+import Tags from './../Tags/Tags';
 
 const ArticleProjections = ({projections, onProjectionToggled}) => {
   const [filterText, setFilterText] = useState('');
   const textProjectionRef = useRef();
+  const tagProjections = projections.filter(p => p.type === 'tag');
 
   useEffect(() => {
     textProjectionRef.current = find(projections, p => p.type === 'text');
@@ -47,6 +49,14 @@ const ArticleProjections = ({projections, onProjectionToggled}) => {
           )
         })}
       </div>
+
+      {tagProjections.length > 0 ? (
+        <div className="tags-filter-projection">
+          <Tags
+            names={tagProjections.map(p => p.tag)}
+            onRemove={tag => {onProjectionToggled(tagProjections.find(p => p.tag === tag), false)}}/>
+        </div>
+      ) : null}
 
       <div className="text-filter-projection">
         <input

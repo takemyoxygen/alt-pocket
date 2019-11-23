@@ -8,7 +8,8 @@ export const actionTypes = {
   ARCHIVE: 'archive',
   UPDATE_ARTICLES: 'articles:update',
   DELETE_ARTICLES: 'articles:delete',
-  TOGGLE_PROJECTION: 'projection:toggle'
+  TOGGLE_PROJECTION: 'projection:toggle',
+  TOGGLE_FILTER_BY_TAG: 'tag-filter:toggle'
 }
 
 const pickIds = xs => xs.map(x => x.id);
@@ -101,5 +102,9 @@ export default {
     articles,
     compose(apiClient.remove, pickIds),
     getState().since
-  )
+  ),
+
+  toggleFilterByTag(tag) {
+    return {type: actionTypes.TOGGLE_FILTER_BY_TAG, tag};
+  }
 }

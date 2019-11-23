@@ -8,7 +8,7 @@ function ArticlesContainer() {
   return (
     <div>
       <ArticleProjections />
-      <ArticlesList operations={operations} onTagClick={() => {}}/>
+      <ArticlesList operations={operations} />
     </div>
   )
 }

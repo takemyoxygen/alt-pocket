@@ -34,6 +34,16 @@ export function textFilter(text) {
   }
 }
 
+export function tagFilter(tag) {
+  const tagLower = tag.toLowerCase()
+  return {
+    type: 'tag',
+    tag,
+    title: 'Filter by tag',
+    filter: article => article.tags.some(t => t.toLowerCase() === tagLower)
+  }
+}
+
 export function combine(projections) {
   return {
     title: projections.map(p => p.title).join(', '),
