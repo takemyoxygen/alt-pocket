@@ -20,7 +20,7 @@ const localStorageFor = key => ({
   export const stateStorage = {
     get() {
       const data = inner.get();
-      return data.articles
+      return data && data.articles
         ? {
           ...data,
           articles: mapValues(data.articles, article => ({

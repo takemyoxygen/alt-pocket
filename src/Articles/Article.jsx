@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Tags from '../Tags/Tags';
 import ArticleOperations from './ArticleOperations';
 
-const Article = ({article, operations, onTagClick}) =>
+const Article = ({article, onTagClick, onTagRemove}) =>
   <article className="articles-list__article">
     <a
       className="articles-list__article__title-link"
@@ -17,7 +17,7 @@ const Article = ({article, operations, onTagClick}) =>
     {article.tags ?
       <Tags
         onClick={onTagClick}
-        onRemove={tag => operations.removeTag(article, tag)}
+        onRemove={tag => onTagRemove(tag)}
         names={article.tags}
       />
       : null}
@@ -28,8 +28,8 @@ const Article = ({article, operations, onTagClick}) =>
 
 Article.propTypes = {
   article: PropTypes.object.isRequired,
-  operations: PropTypes.object.isRequired,
-  onTagClick: PropTypes.func.isRequired
+  onTagClick: PropTypes.func.isRequired,
+  onTagRemove: PropTypes.func.isRequired
 }
 
 export default Article;

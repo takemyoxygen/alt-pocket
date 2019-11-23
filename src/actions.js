@@ -1,5 +1,5 @@
 import {mapArticle} from './data/converter';
-import {partition, values} from 'lodash';
+import {partition, values, without} from 'lodash';
 import {compose} from 'lodash/fp';
 import * as apiClient from './data/apiClient'
 
@@ -104,7 +104,11 @@ export default {
     getState().since
   ),
 
-  toggleFilterByTag(tag) {
-    return {type: actionTypes.TOGGLE_FILTER_BY_TAG, tag};
-  }
+  removeTag: (article, tag) => (dispatch, getState) => updateArticles(
+    dispatch,
+    [article],
+    a => ({...a, tags: without(a.tags, tag)}),
+    articles => apiClient.removeTag(pickIds(articles), tag),
+    getState().since
+  )
 }
