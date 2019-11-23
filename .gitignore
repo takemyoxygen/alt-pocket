@@ -32,6 +32,4 @@ yarn-error.log*
 
 # Generated files
 .idea/**/contentModel.xml
-
-package-lock.json
 /.idea/$CACHE_FILE$
