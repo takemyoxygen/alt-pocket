@@ -1,0 +1,9 @@
+.tag-input-container {
+    background: white;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.tag-input-popover > .Popover-tip {
+    fill: white;
+}

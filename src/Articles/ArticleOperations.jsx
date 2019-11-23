@@ -1,7 +1,10 @@
 import {MdArchive, MdDelete, MdOpenInNew, MdStar, MdStarBorder, MdUnarchive} from 'react-icons/md';
-import React from 'react';
+import {AiFillTag} from 'react-icons/ai';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import actions from '../actions';
+import Popover from 'react-popover';
+import './ArticleOperations.css';
 
 function confirmDelete(performDelete) {
   return () => {
@@ -9,6 +12,27 @@ function confirmDelete(performDelete) {
       performDelete();
     }
   }
+}
+
+function TagInput() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Popover
+      className={"tag-input-popover"}
+      isOpen={isOpen}
+      onOuterAction={() => setIsOpen(false)}
+      enterExitTransitionDurationMs={0}
+      place="left"
+      tipSize={0.01}
+      body={(
+        <div className="tag-input-container">
+          <input type="text" autoFocus={true} />
+        </div>
+      )}>
+      <AiFillTag title="Add tag" onClick={() => setIsOpen(!isOpen)} />
+    </Popover>
+  );
 }
 
 const ArticleOperations = ({article, favorite, unfavorite, archive, readd, remove}) => (
@@ -30,6 +54,8 @@ const ArticleOperations = ({article, favorite, unfavorite, archive, readd, remov
     {article.favorite
       ? <MdStar title="Unfavorite" onClick={() => unfavorite([article])}/>
       : <MdStarBorder title={"Favorite"} onClick={() => favorite([article])}/>}
+
+    <TagInput />
 
     <MdDelete title="Delete" onClick={confirmDelete(() => remove([article]))}/>
   </div>
