@@ -1,5 +1,5 @@
 import {mapArticle} from './data/converter';
-import {partition, values, without} from 'lodash';
+import {partition, values, without, uniq} from 'lodash';
 import {compose} from 'lodash/fp';
 import * as apiClient from './data/apiClient'
 
@@ -109,6 +109,14 @@ export default {
     [article],
     a => ({...a, tags: without(a.tags, tag)}),
     articles => apiClient.removeTag(pickIds(articles), tag),
+    getState().since
+  ),
+
+  addTags: (articles, tags) => (dispatch, getState) => updateArticles(
+    dispatch,
+    articles,
+    a => ({...a, tags: uniq([...a.tags, ...tags]).sort()}),
+    articles => apiClient.addTags(pickIds(articles), tags),
     getState().since
   )
 }
