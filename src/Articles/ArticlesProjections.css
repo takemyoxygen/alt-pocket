@@ -26,15 +26,37 @@
   background: #676767;
 }
 
-.text-filter-projection {
+.text-filter-and-operations {
   padding: 8px;
+  display: flex;
 }
 
-.text-filter-projection__input {
-  width: 100%;
+.text-filter {
+  flex: 1 1 auto;
+  display: flex;
+  margin-right: 8px;
+}
+
+.text-filter__input {
+  flex: 1 1 auto;
   font-size: 1.1em;
 }
 
 .tags-filter-projection {
   padding: 8px;
+}
+
+.article-list-operations {
+  display: flex;
+  align-items: center;
+}
+
+.article-list-operations svg {
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+}
+
+.article-list-operations svg:hover {
+  opacity: 0.7;
 }

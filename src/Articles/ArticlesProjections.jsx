@@ -6,6 +6,7 @@ import './ArticlesProjections.css';
 import {connect} from 'react-redux';
 import actions from './../actions';
 import Tags from './../Tags/Tags';
+import {GoPencil, MdRefresh} from 'react-icons/all';
 
 const ArticleProjections = ({projections, onProjectionToggled}) => {
   const [filterText, setFilterText] = useState('');
@@ -58,14 +59,21 @@ const ArticleProjections = ({projections, onProjectionToggled}) => {
         </div>
       ) : null}
 
-      <div className="text-filter-projection">
-        <input
-          type="text"
-          className="text-filter-projection__input"
-          placeholder="Filter by name"
-          value={filterText}
-          onChange={onFilterTextChange}
-        />
+      <div className="text-filter-and-operations">
+        <div className="text-filter">
+          <input
+            type="text"
+            className="text-filter__input"
+            placeholder="Filter by name"
+            value={filterText}
+            onChange={onFilterTextChange}
+          />
+        </div>
+
+        <div className="article-list-operations">
+          <GoPencil title="Bulk edit" />
+          <MdRefresh title="Refresh" />
+        </div>
       </div>
 
     </div>
