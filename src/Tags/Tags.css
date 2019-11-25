@@ -1,5 +1,6 @@
 .tags-container {
   display: flex;
+  align-items: center;
 }
 
 .tag {
