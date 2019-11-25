@@ -9,7 +9,8 @@ export const actionTypes = {
   UPDATE_ARTICLES: 'articles:update',
   DELETE_ARTICLES: 'articles:delete',
   TOGGLE_PROJECTION: 'projection:toggle',
-  TOGGLE_FILTER_BY_TAG: 'tag-filter:toggle'
+  TOGGLE_BULK_EDIT: 'bulk-edit:toggle',
+  TOGGLE_ARTICLE_SELECTED: 'bulk-edit:toggle-article'
 }
 
 const pickIds = xs => xs.map(x => x.id);
@@ -118,5 +119,13 @@ export default {
     a => ({...a, tags: uniq([...a.tags, ...tags]).sort()}),
     articles => apiClient.addTags(pickIds(articles), tags),
     getState().since
-  )
+  ),
+
+  toggleBulkEdit() {
+    return {type: actionTypes.TOGGLE_BULK_EDIT};
+  },
+
+  toggleArticleSelected(article) {
+    return {type: actionTypes.TOGGLE_ARTICLE_SELECTED, articleId: article.id};
+  }
 }

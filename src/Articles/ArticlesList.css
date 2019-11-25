@@ -6,9 +6,10 @@
 }
 
 .articles-list__article {
-  padding: 10px 8px;
   display: flex;
   align-items: center;
+  height: 40px;
+  align-items: stretch;
 }
 
 .articles-list__article:hover {
@@ -23,12 +24,14 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  line-height: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .articles-list__article__icons {
   margin-left: 8px;
   display: flex;
+  align-items: center;
 }
 
 .articles-list__article__icons svg {
@@ -42,6 +45,12 @@
 
 .articles-list__article__open-icon-link {
   color: black;
+  display: flex;
+  align-items: center;
+}
+
+.article-list__article__checked-icon {
+  padding: 4px 4px 4px 0;
   display: flex;
   align-items: center;
 }

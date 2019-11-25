@@ -7,7 +7,11 @@ const defaultProjection = unread;
 export const initialState = {
   articles: {},
   since: null,
-  projections: [defaultProjection]
+  projections: [defaultProjection],
+  bulkEdit: {
+    enabled: false,
+    selectedArticles: {}
+  }
 }
 
 export default function (state, action) {
@@ -65,6 +69,34 @@ export default function (state, action) {
       return {
         ...state,
         projections: newProjections
+      };
+    }
+
+    case actionTypes.TOGGLE_BULK_EDIT: {
+      return {
+        ...state,
+        bulkEdit: {
+          ...state.bulkEdit,
+          enabled: !state.bulkEdit.enabled,
+          selectedArticles: {}
+        }
+      }
+    }
+
+    case actionTypes.TOGGLE_ARTICLE_SELECTED: {
+      const newSelectedArticles = {...state.bulkEdit.selectedArticles};
+      if (newSelectedArticles.hasOwnProperty(action.articleId)) {
+        delete newSelectedArticles[action.articleId];
+      } else {
+        newSelectedArticles[action.articleId] = true;
+      }
+
+      return {
+        ...state,
+        bulkEdit: {
+          ...state.bulkEdit,
+          selectedArticles: newSelectedArticles
+        }
       };
     }
 
