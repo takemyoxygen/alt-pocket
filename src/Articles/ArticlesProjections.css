@@ -27,7 +27,7 @@
 }
 
 .text-filter-and-operations {
-  padding: 8px;
+  padding: 8px 8px 0 8px;
   display: flex;
 }
 
@@ -59,4 +59,9 @@
 
 .article-list-operations svg:hover {
   opacity: 0.7;
+}
+
+.bulk-edit-icon--enabled {
+  background: black;
+  fill: white;
 }

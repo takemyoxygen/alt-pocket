@@ -8,7 +8,7 @@ import actions from './../actions';
 import Tags from './../Tags/Tags';
 import {GoPencil, MdRefresh} from 'react-icons/all';
 
-const ArticleProjections = ({projections, onProjectionToggled}) => {
+const ArticleProjections = ({projections, onProjectionToggled, bulkEditEnabled, onBulkToggled}) => {
   const [filterText, setFilterText] = useState('');
   const textProjectionRef = useRef();
   const tagProjections = projections.filter(p => p.type === 'tag');
@@ -71,7 +71,11 @@ const ArticleProjections = ({projections, onProjectionToggled}) => {
         </div>
 
         <div className="article-list-operations">
-          <GoPencil title="Bulk edit" />
+          <GoPencil
+            title="Bulk edit"
+            className={bulkEditEnabled ? 'bulk-edit-icon--enabled': ''}
+            onClick={onBulkToggled}
+          />
           <MdRefresh title="Refresh" />
         </div>
       </div>
@@ -86,7 +90,8 @@ ArticleProjections.propTypes = {
 }
 
 export default connect(
-    state => ({projections: state.projections}),
-    dispatch => ({onProjectionToggled: (projection, enabled) => dispatch(actions.toggleProjection(projection, enabled))}))(
-      ArticleProjections
-  );
+    state => ({projections: state.projections, bulkEditEnabled: state.bulkEdit.enabled}),
+    {
+      onProjectionToggled: actions.toggleProjection,
+      onBulkToggled: actions.toggleBulkEdit
+    })(ArticleProjections);
