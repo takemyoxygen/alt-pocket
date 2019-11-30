@@ -12,14 +12,16 @@ const Article = ({article, onTagClick, onTagRemove, bulkEditEnabled, toggleArtic
       </div>
     ) : null}
 
-    <a
-      className="articles-list__article__title-link"
-      href={article.url}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {article.title}
-    </a>
+    <div className="articles-list__article__title-link-container">
+      <a
+        className="articles-list__article__title-link"
+        href={article.url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {article.title}
+      </a>
+    </div>
 
     {article.tags ?
       <Tags
