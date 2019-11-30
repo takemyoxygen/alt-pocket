@@ -113,11 +113,11 @@ export default {
     getState().since
   ),
 
-  addTags: (articles, tags) => (dispatch, getState) => updateArticles(
+  saveTags: (articles, tags) => (dispatch, getState) => updateArticles(
     dispatch,
     articles,
-    a => ({...a, tags: uniq([...a.tags, ...tags]).sort()}),
-    articles => apiClient.addTags(pickIds(articles), tags),
+    a => ({...a, tags}),
+    articles => apiClient.replaceTags(pickIds(articles), tags),
     getState().since
   ),
 

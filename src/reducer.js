@@ -26,7 +26,7 @@ export default function (state, action) {
     case actionTypes.UPDATE_ARTICLES: {
       return {
         ...state,
-        since: action.since,
+        since: action.since || state.since,
         articles: {
           ...state.articles,
           ...keyBy(action.articles, a => a.id)

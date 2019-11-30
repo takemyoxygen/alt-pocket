@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import './Tags.css';
 import {GoX} from 'react-icons/go';
 
-const Tag = ({name, onRemove, onClick}) => (
+const Tag = ({name, onRemove, onClick, showDelete = true}) => (
   <div className="tag">
-    <div onClick={() => onClick(name)}>{name}</div>
-    <div title="Delete tag" className="tag__icon" onClick={() => onRemove(name)}><GoX/></div>
+    <div className="tag__text" onClick={() => onClick(name)}>{name}</div>
+    {showDelete
+     ? <div title="Delete tag" className="tag__icon" onClick={() => onRemove(name)}><GoX/></div>
+      : null
+    }
   </div>
 );
 
@@ -17,7 +20,8 @@ Tag.defaultProps = {
 Tag.propTypes = {
   name: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  onRemove: PropTypes.func.isRequired
+  onRemove: PropTypes.func.isRequired,
+  showDelete: PropTypes.bool
 };
 
 export default Tag;

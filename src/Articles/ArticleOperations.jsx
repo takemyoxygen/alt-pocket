@@ -1,11 +1,10 @@
 import {MdArchive, MdDelete, MdOpenInNew, MdStar, MdStarBorder, MdUnarchive} from 'react-icons/md';
 import {AiFillTag} from 'react-icons/ai';
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import actions from '../actions';
-import Popover from 'react-popover';
-import './ArticleOperations.css';
+import TagInputModal from '../Tags/TagInputModal';
 
 function confirmDelete(performDelete) {
   return () => {
@@ -15,60 +14,34 @@ function confirmDelete(performDelete) {
   }
 }
 
-const TagInput = ({onTagsEntered}) => {
+const TagInput = ({article, onSave}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [tagValue, setTagValue] = useState('');
 
-  useEffect(() => {
-    if (!isOpen) {
-      setTagValue('');
-    }
-  }, [isOpen]);
-
-  const onKeyDown = useCallback((evt) => {
-    if (evt.keyCode === 27) {
-      setIsOpen(false);
-      return false;
-    } else if (evt.keyCode === 13 && tagValue) {
-      const tags = tagValue.split(',').map(t => t.trim()).filter(t => !!t);
-
-      onTagsEntered(tags);
-      setIsOpen(false);
-
-      return false;
-    }
-  }, [tagValue, onTagsEntered]);
+  const onSaveFromModal = useCallback(tags => {
+    setIsOpen(false);
+    onSave(tags);
+  }, [onSave]);
 
   return (
-    <Popover
-      className={"tag-input-popover"}
-      isOpen={isOpen}
-      onOuterAction={() => setIsOpen(false)}
-      enterExitTransitionDurationMs={0}
-      place="left"
-      tipSize={0.01}
-      body={(
-        <div className="tag-input-container">
-          <input
-            type="text"
-            autoFocus={true}
-            value={tagValue}
-            onChange={evt => setTagValue(evt.target.value)}
-            placeholder={`New tags split by ","`}
-            onKeyDown={onKeyDown}
-          />
-        </div>
-      )}>
+    <>
+      <TagInputModal
+        onSave={onSaveFromModal}
+        tags={article.tags}
+        isOpen={isOpen}
+        onDismiss={() => setIsOpen(false)}
+      />
+
       <AiFillTag title="Add tag" onClick={() => setIsOpen(!isOpen)} />
-    </Popover>
-  );
+    </>
+  )
 }
 
 TagInput.propTypes = {
-  onTagsEntered: PropTypes.func.isRequired
+  article: PropTypes.object.isRequired,
+  onSave: PropTypes.func.isRequired
 };
 
-const ArticleOperations = ({article, favorite, unfavorite, archive, readd, remove, addTags}) => (
+const ArticleOperations = ({article, favorite, unfavorite, archive, readd, remove, saveTags}) => (
   <div className="articles-list__article__icons">
     <a
       href={article.url}
@@ -88,7 +61,7 @@ const ArticleOperations = ({article, favorite, unfavorite, archive, readd, remov
       ? <MdStar title="Unfavorite" onClick={() => unfavorite([article])}/>
       : <MdStarBorder title={"Favorite"} onClick={() => favorite([article])}/>}
 
-    <TagInput onTagsEntered={tags => addTags([article], tags)}/>
+    <TagInput article={article} onSave={tags => saveTags([article], tags)}/>
 
     <MdDelete title="Delete" onClick={confirmDelete(() => remove([article]))}/>
   </div>
@@ -101,5 +74,5 @@ export default connect(null,
     favorite: actions.favorite,
     unfavorite: actions.unfavorite,
     remove: actions.remove,
-    addTags: actions.addTags
+    saveTags: actions.saveTags
   })(ArticleOperations);

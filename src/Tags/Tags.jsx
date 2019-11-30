@@ -5,7 +5,7 @@ import './Tags.css';
 
 const Tags = ({names, onClick, onRemove}) => (
   <div className="tags-container">
-    {names.map(name => <Tag name={name} key={name} onClick={onClick} onRemove={onRemove}/>)}
+    {names.map(name => <Tag showDelete={false} name={name} key={name} onClick={onClick} onRemove={onRemove}/>)}
   </div>
 );
 
