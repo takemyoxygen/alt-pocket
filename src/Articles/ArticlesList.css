@@ -35,23 +35,12 @@
   white-space: nowrap;
 }
 
-.articles-list__article__icons {
-  margin-left: 8px;
+.articles-list__article .operations-container {
   display: none;
-  align-items: center;
 }
 
-.articles-list__article:hover .articles-list__article__icons{
+.articles-list__article:hover .operations-container {
   display: flex;
-}
-
-.articles-list__article__icons svg {
-  height: 20px;
-  width: 20px;
-}
-
-.articles-list__article__icons > *:not(:last-child) {
-  margin-right: 8px;
 }
 
 .article-list__article__checked-icon {

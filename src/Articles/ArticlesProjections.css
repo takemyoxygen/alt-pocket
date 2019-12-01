@@ -65,3 +65,7 @@
   background: black;
   fill: white;
 }
+
+.article-list-bulk-operations {
+  margin-top: 8px;
+}

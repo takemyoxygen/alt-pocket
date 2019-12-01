@@ -14,7 +14,7 @@ const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 const TagComponent = ({tag, onDelete}) => <Tag name={tag.name} onRemove={() => onDelete()} />;
 
-const TagInputModal = ({tags, onSave, onDismiss, isOpen}) => {
+const TagInputModal = ({tags, onSave, onDismiss, isOpen, title}) => {
 
   const [currentTags, setCurrentTags] = useState(tags.map(t => ({id: t, name: t})));
 
@@ -47,7 +47,7 @@ const TagInputModal = ({tags, onSave, onDismiss, isOpen}) => {
       ariaHideApp={false}
     >
         <div className="tag-input-content">
-            <h3 className="tag-input-content__header">Enter tags</h3>
+            <h3 className="tag-input-content__header">{title}</h3>
             <ReactTags
               tags={currentTags}
               handleAddition={onAdd}

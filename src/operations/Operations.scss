@@ -1,0 +1,25 @@
+svg.operation,
+.operation svg {
+
+  &:hover {
+    opacity: 0.5;
+  }
+
+  height: 20px;
+  width:20px
+}
+
+.operation__open {
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.operations-container {
+  display: flex;
+  align-items: center;
+
+  .operation:not(:last-child) {
+    margin-right: 8px;
+  }
+}

@@ -121,6 +121,14 @@ export default {
     getState().since
   ),
 
+  addTags: (articles, tags) => (dispatch, getState) => updateArticles(
+    dispatch,
+    articles,
+    a => ({...a, tags: [...a.tags, ...tags]}),
+    articles => apiClient.addTags(pickIds(articles), tags),
+    getState().since
+  ),
+
   toggleBulkEdit() {
     return {type: actionTypes.TOGGLE_BULK_EDIT};
   },

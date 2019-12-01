@@ -76,5 +76,9 @@ export function removeTag(ids, tag) {
 }
 
 export function replaceTags(ids, tags) {
-  return sendCommand('tags_replace', ids, {tags: tags.join(',')})
+  return sendCommand('tags_replace', ids, {tags: tags.join(',')});
+}
+
+export function addTags(ids, tags) {
+  return sendCommand('tags_add', ids, {tags: tags.join(',')});
 }

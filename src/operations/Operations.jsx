@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MdUnarchive, MdArchive, MdStarBorder, MdStar, MdDelete, MdOpenInNew } from 'react-icons/md';
 import { AiFillTag } from 'react-icons/ai';
 import TagInputModal from './../Tags/TagInputModal';
-import './Operations.css';
+import './Operations.scss';
 
 export const OpenInNewTab = ({ url }) => (
   <a
@@ -26,12 +26,13 @@ const clickProps = {
 };
 
 export const Unarchive = ({ onClick }) =>
-  <MdUnarchive ctitle="Unarchive" onClick={onClick} />;
+  <MdUnarchive className="operation" title="Unarchive" onClick={onClick} />;
 
 Unarchive.propTypes = clickProps;
 
 export const Archive = ({ onClick }) =>
   <MdArchive className="operation" title="Archive" onClick={onClick} />;
+
 Archive.propTypes = clickProps;
 
 export const Favorite = ({ onClick }) =>
@@ -57,7 +58,7 @@ export const Delete = ({ onClick }) =>
 
 Delete.propTypes = clickProps;
 
-const TagInput = ({ tags, onSave }) => {
+const TagInput = ({ tags, onSave, title }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onSaveFromModal = useCallback(tags => {
@@ -71,6 +72,7 @@ const TagInput = ({ tags, onSave }) => {
         onSave={onSaveFromModal}
         tags={tags}
         isOpen={isOpen}
+        title={title}
         onDismiss={() => setIsOpen(false)}
       />
 
@@ -81,8 +83,9 @@ const TagInput = ({ tags, onSave }) => {
 
 TagInput.propTypes = {
   tags: PropTypes.arrayOf(PropTypes.string),
-  onSave: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired
 };
 
-export const EditTags = ({ tags, onSave }) => <TagInput tags={tags} onSave={onSave} />;
+export const EditTags = ({ tags, onSave, title }) => <TagInput tags={tags} onSave={onSave} title={title} />;
 EditTags.propTypes = TagInput.propTypes;

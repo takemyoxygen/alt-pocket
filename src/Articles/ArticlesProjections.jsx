@@ -1,14 +1,21 @@
-import React, {useState, useMemo, useRef, useEffect} from 'react';
-import {throttle, find} from 'lodash';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { throttle, find, pick } from 'lodash';
 import PropTypes from 'prop-types';
-import {quickProjections, textFilter} from '../projections';
+import { quickProjections, textFilter } from '../projections';
 import './ArticlesProjections.css';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import actions from './../actions';
 import Tags from './../Tags/Tags';
-import {GoPencil, MdRefresh} from 'react-icons/all';
+import { GoPencil, MdRefresh } from 'react-icons/all';
+import BulkOperations from '../operations/BulkOperations';
 
-const ArticleProjections = ({projections, onProjectionToggled, bulkEditEnabled, onBulkToggled}) => {
+const ArticleProjections = ({
+  projections,
+  onProjectionToggled,
+  bulkEditEnabled,
+  onBulkToggled,
+  selectedArticles
+}) => {
   const [filterText, setFilterText] = useState('');
   const textProjectionRef = useRef();
   const tagProjections = projections.filter(p => p.type === 'tag');
@@ -55,7 +62,7 @@ const ArticleProjections = ({projections, onProjectionToggled, bulkEditEnabled, 
         <div className="tags-filter-projection">
           <Tags
             names={tagProjections.map(p => p.tag)}
-            onRemove={tag => {onProjectionToggled(tagProjections.find(p => p.tag === tag), false)}}/>
+            onRemove={tag => { onProjectionToggled(tagProjections.find(p => p.tag === tag), false) }} />
         </div>
       ) : null}
 
@@ -73,12 +80,18 @@ const ArticleProjections = ({projections, onProjectionToggled, bulkEditEnabled, 
         <div className="article-list-operations">
           <GoPencil
             title="Bulk edit"
-            className={bulkEditEnabled ? 'bulk-edit-icon--enabled': ''}
+            className={bulkEditEnabled ? 'bulk-edit-icon--enabled' : ''}
             onClick={onBulkToggled}
           />
           <MdRefresh title="Refresh" />
         </div>
       </div>
+
+      {bulkEditEnabled && selectedArticles.length > 0 ? (
+        <div className="article-list-bulk-operations">
+          <BulkOperations articles={selectedArticles} />
+        </div>
+      ) : null}
 
     </div>
   )
@@ -90,8 +103,12 @@ ArticleProjections.propTypes = {
 }
 
 export default connect(
-    state => ({projections: state.projections, bulkEditEnabled: state.bulkEdit.enabled}),
-    {
-      onProjectionToggled: actions.toggleProjection,
-      onBulkToggled: actions.toggleBulkEdit
-    })(ArticleProjections);
+  state => ({
+    projections: state.projections,
+    bulkEditEnabled: state.bulkEdit.enabled,
+    selectedArticles: Object.values(pick(state.articles, Object.keys(state.bulkEdit.selectedArticles)))
+  }),
+  {
+    onProjectionToggled: actions.toggleProjection,
+    onBulkToggled: actions.toggleBulkEdit
+  })(ArticleProjections);

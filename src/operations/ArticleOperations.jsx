@@ -4,7 +4,7 @@ import actions from '../actions';
 import { OpenInNewTab, Archive, Unarchive, Unfavorite, Favorite, EditTags, Delete } from './Operations';
 
 const ArticleOperations = ({ article, favorite, unfavorite, archive, readd, remove, saveTags }) => (
-  <div className="articles-list__article__icons">
+  <div className="operations-container">
     <OpenInNewTab url={article.url} />
 
     {article.archived
@@ -15,7 +15,7 @@ const ArticleOperations = ({ article, favorite, unfavorite, archive, readd, remo
       ? <Unfavorite onClick={() => unfavorite([article])} />
       : <Favorite onClick={() => favorite([article])} />}
 
-    <EditTags tags={article.tags} onSave={tags => saveTags([article], tags)} />
+    <EditTags tags={article.tags} onSave={tags => saveTags([article], tags)} title="Edit article tags"/>
 
     <Delete onClick={() => remove([article])} />
   </div>
