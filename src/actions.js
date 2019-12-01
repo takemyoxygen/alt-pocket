@@ -1,5 +1,5 @@
 import {mapArticle} from './data/converter';
-import {partition, values, without, uniq} from 'lodash';
+import {partition, values, without} from 'lodash';
 import {compose} from 'lodash/fp';
 import * as apiClient from './data/apiClient'
 

@@ -1,0 +1,10 @@
+svg.operation:hover,
+.operation svg:hover {
+  opacity: 0.5;
+}
+
+.operation__open {
+  color: black;
+  display: flex;
+  align-items: center;
+}

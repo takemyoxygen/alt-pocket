@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tags from '../Tags/Tags';
-import ArticleOperations from './ArticleOperations';
+import ArticleOperations from '../operations/ArticleOperations';
 import {MdCheckBoxOutlineBlank, MdCheckBox} from 'react-icons/md';
 
 const Article = ({article, onTagClick, onTagRemove, bulkEditEnabled, toggleArticleSelected, selected}) =>
