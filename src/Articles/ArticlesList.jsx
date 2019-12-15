@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {combine, tagFilter} from '../projections';
 import actions from './../actions';
 import {values, filter, sortBy, compose} from 'lodash/fp';
-import VirtualizedList from './VirtualizedList';
+import VirtualizedList from '../virtualizedList/VirtualizedList';
 
 function ArticlesList({
   articles,
@@ -19,7 +19,6 @@ function ArticlesList({
     <VirtualizedList
       className="articles-list"
       items={articles}
-      visibleItemsCount={20}
       itemHeight={40}
       renderItem={article =>
         <Article
