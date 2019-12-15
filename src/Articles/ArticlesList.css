@@ -1,7 +1,6 @@
 .articles-list {
   margin-top: -1px;
-  display: flex;
-  flex-direction: column;
+  overflow-y: scroll;
   cursor: pointer;
 }
 
