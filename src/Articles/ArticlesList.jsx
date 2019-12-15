@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {combine, tagFilter} from '../projections';
 import actions from './../actions';
 import {values, filter, sortBy, compose} from 'lodash/fp';
+import VirtualizedList from '../virtualizedList/VirtualizedList';
 
 function ArticlesList({
   articles,
@@ -15,8 +16,11 @@ function ArticlesList({
   toggleArticleSelected,
   selectedArticles}) {
   return (
-    <div className="articles-list">
-      {articles.map(article => (
+    <VirtualizedList
+      className="articles-list"
+      items={articles}
+      itemHeight={40}
+      renderItem={article =>
         <Article
           bulkEditEnabled={bulkEditEnabled}
           key={article.id}
@@ -25,9 +29,7 @@ function ArticlesList({
           onTagRemove={tag => onTagRemove(article, tag)}
           toggleArticleSelected={() => toggleArticleSelected(article)}
           selected={!!selectedArticles[article.id]}
-        />
-      ))}
-    </div>
+        />}/>
   );
 }
 

@@ -32,7 +32,7 @@ function App() {
 
   return (
     <Provider store={store}>
-      <div className="app-container" id="root">
+      <div className="app-container">
         <div className="app">
           <ArticlesContainer />
         </div>
@@ -40,7 +40,5 @@ function App() {
     </Provider>
   );
 }
-
-// ReactModal.setAppElement('#root');
 
 export default App;

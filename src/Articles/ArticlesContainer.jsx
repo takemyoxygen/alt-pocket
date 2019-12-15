@@ -4,7 +4,7 @@ import ArticlesList from './ArticlesList';
 
 function ArticlesContainer() {
   return (
-    <div>
+    <div className="articles-container">
       <ArticleProjections />
       <ArticlesList />
     </div>

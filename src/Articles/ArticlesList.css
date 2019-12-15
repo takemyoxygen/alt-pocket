@@ -1,8 +1,13 @@
-.articles-list {
-  margin-top: -1px;
+.articles-container {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.articles-list {
+  margin-top: -1px;
   cursor: pointer;
+  flex: 1 1 auto;
 }
 
 .articles-list__article {
