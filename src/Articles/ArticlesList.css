@@ -1,6 +1,5 @@
 .articles-list {
   margin-top: -1px;
-  overflow-y: scroll;
   cursor: pointer;
 }
 
