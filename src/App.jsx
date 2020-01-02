@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import {authorized} from './auth';
+import {authorized} from './utils/auth';
 import {stateStorage} from './data/storage';
 import ArticlesContainer from './Articles/ArticlesContainer';
 import {applyMiddleware, createStore} from 'redux';

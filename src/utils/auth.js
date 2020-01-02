@@ -1,16 +1,18 @@
-import {corsProxy} from './ajax';
+import {corsProxy} from '../ajax';
+import {getConfig} from './config'
 
-export const CONSUMER_KEY = process.env.REACT_APP_API_CONSUMER_KEY;
-
-const HOME = 'http://localhost:3000';
+const home = window.location.href;
 const ACCESS_TOKEN_KEY = 'access-token';
 
-const redirectUrl = code => code ? `${HOME}/auth?code=${code}` : `${HOME}/auth`;
+const redirectUrl = reqToken => `${home}?request-token=${reqToken}`;
 
 async function getRequestToken() {
+
+  const {consumerKey} = await getConfig();
+
   const requestBody = {
-    consumer_key: CONSUMER_KEY,
-    redirect_uri: redirectUrl()
+    consumer_key: consumerKey,
+    redirect_uri: home
   };
 
   const response = await fetch((corsProxy('https://getpocket.com/v3/oauth/request')), {
@@ -41,8 +43,11 @@ function getAccessToken() {
 }
 
 async function obtainAccessToken(requestToken) {
+
+  const {consumerKey} = await getConfig();
+
   const requestBody = {
-    consumer_key: CONSUMER_KEY,
+    consumer_key: consumerKey,
     code: requestToken
   };
 
@@ -76,12 +81,14 @@ export async function authorize() {
     return;
   }
 
-  if (window.location.href.startsWith(redirectUrl())) {
-    const url = new URL(window.location);
-    const requestToken = url.searchParams.get('code');
+  const url = new URL(window.location);
+  const requestToken = url.searchParams.get('request-token');
+
+  if (requestToken) {
     const accessToken = await obtainAccessToken(requestToken);
     storeAccessToken(accessToken);
-    window.location = HOME;
+    url.searchParams.delete('request-token');
+    window.location = url.href;
   } else {
     getRequestToken().then(redirectToAuthPage);
   }

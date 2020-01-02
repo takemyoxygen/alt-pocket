@@ -1,11 +1,13 @@
 FROM node:12-alpine
 
 WORKDIR /usr/src/app
-COPY . .
 
-RUN npm ci --no-progress && \
-    npm run build
+COPY package.json package-lock.json ./
+RUN npm ci --no-progress
 
+COPY ./src ./src
+COPY ./public ./public
+RUN npm run build
 
 FROM nginx:latest
 
