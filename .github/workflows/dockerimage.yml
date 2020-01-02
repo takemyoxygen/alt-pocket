@@ -3,12 +3,12 @@ name: Build Docker Image
 on: [push]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag takemyoxygen/alt-pocket:$(date +%s)
+      uses: actions/checkout@v1
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u takemyoxygen --password-stdin
+        docker build . --file Dockerfile --tag takemyoxygen/alt-pocket:$(date +%s)
+        docker push takemyoxygen/alt-pocket
