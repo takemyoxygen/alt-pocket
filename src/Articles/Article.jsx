@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tags from '../Tags/Tags';
+import Tags from '../tags/Tags';
 import ArticleOperations from '../operations/ArticleOperations';
 import {MdCheckBoxOutlineBlank, MdCheckBox} from 'react-icons/md';
 

@@ -5,7 +5,7 @@ import { quickProjections, textFilter } from '../projections';
 import './ArticlesProjections.css';
 import { connect } from 'react-redux';
 import actions from './../actions';
-import Tags from './../Tags/Tags';
+import Tags from './../tags/Tags';
 import { GoPencil, MdRefresh } from 'react-icons/all';
 import BulkOperations from '../operations/BulkOperations';
 

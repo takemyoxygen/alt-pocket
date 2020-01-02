@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import './App.css';
 import {authorized} from './utils/auth';
 import {stateStorage} from './data/storage';
-import ArticlesContainer from './Articles/ArticlesContainer';
+import ArticlesContainer from './articles/ArticlesContainer';
 import {applyMiddleware, createStore} from 'redux';
 import reducer, {initialState} from './reducer';
 import {Provider} from 'react-redux';

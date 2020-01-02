@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { MdUnarchive, MdArchive, MdStarBorder, MdStar, MdDelete, MdOpenInNew } from 'react-icons/md';
 import { AiFillTag } from 'react-icons/ai';
-import TagInputModal from './../Tags/TagInputModal';
+import TagInputModal from '../tags/TagInputModal';
 import './Operations.scss';
 
 export const OpenInNewTab = ({ url }) => (

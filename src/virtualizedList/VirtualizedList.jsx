@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import './VirtualizedList.scss';
 
@@ -8,7 +8,6 @@ const VirtualizedListItem = ({ children, top, height }) => (
 
 const VirtualizedList = ({ items, className, renderItem, itemHeight }) => {
   const [start, setStart] = useState(0);
-  const viewPortRef = useRef(null);
   const [viewPortHeight, setViewPortHeight] = useState(null);
 
   const visibleItemsCount = useMemo(
@@ -27,12 +26,9 @@ const VirtualizedList = ({ items, className, renderItem, itemHeight }) => {
     requestAnimationFrame(() => setStart(newStart));
   }
 
-  // TODO use callback ref to get rid of the warning
-  useEffect(() => {
-    if (!viewPortHeight && viewPortRef.current) {
-      setViewPortHeight(viewPortRef.current.clientHeight);
-    }
-  }, [viewPortHeight, viewPortRef.current]);
+  const viewPortRef = useCallback(element => {
+    setViewPortHeight(element.clientHeight);
+  }, [])
 
   const viewPortStyle = useMemo(
     () => viewPortHeight ? ({height: viewPortHeight}) : {},
