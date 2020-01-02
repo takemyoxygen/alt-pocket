@@ -6,12 +6,16 @@ import ArticlesContainer from './articles/ArticlesContainer';
 import {applyMiddleware, createStore} from 'redux';
 import reducer, {initialState} from './reducer';
 import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import {logger} from 'redux-logger';
 import actions from './actions';
 import {throttle} from 'lodash';
+import { rootSaga } from './sagas';
 
-const store = createStore(reducer, initialState, applyMiddleware(thunk, logger));
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware, logger));
+sagaMiddleware.run(rootSaga);
 
 const pickPersistableState = ({articles, since}) => ({articles, since});
 
