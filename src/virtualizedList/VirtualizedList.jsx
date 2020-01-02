@@ -27,6 +27,7 @@ const VirtualizedList = ({ items, className, renderItem, itemHeight }) => {
     requestAnimationFrame(() => setStart(newStart));
   }
 
+  // TODO use callback ref to get rid of the warning
   useEffect(() => {
     if (!viewPortHeight && viewPortRef.current) {
       setViewPortHeight(viewPortRef.current.clientHeight);
@@ -59,7 +60,6 @@ VirtualizedList.propTypes = {
   className: PropTypes.string,
   items: PropTypes.array.isRequired,
   renderItem: PropTypes.func.isRequired,
-  visibleItemsCount: PropTypes.number.isRequired,
   itemHeight: PropTypes.number.isRequired
 };
 

@@ -1,10 +1,13 @@
-import {CONSUMER_KEY, requireAccessToken} from '../auth';
+import {requireAccessToken} from '../utils/auth';
 import {corsProxy} from '../ajax';
+import { getConfig } from '../utils/config';
 
 export async function fetchArticlesData(since = undefined) {
+  const {consumerKey} = await getConfig();
+
   const body = {
     access_token: requireAccessToken(),
-    consumer_key: CONSUMER_KEY,
+    consumer_key: consumerKey,
     detailType: 'complete',
     state: 'all',
     since
@@ -22,8 +25,10 @@ export async function fetchArticlesData(since = undefined) {
 }
 
 async function sendCommands(commands) {
+  const {consumerKey} = await getConfig();
+
   const body = {
-    consumer_key: CONSUMER_KEY,
+    consumer_key: consumerKey,
     access_token: requireAccessToken(),
     actions: commands
   }
