@@ -25,23 +25,26 @@ const clickProps = {
   onClick: PropTypes.func.isRequired
 };
 
-export const Unarchive = ({ onClick }) =>
-  <MdUnarchive className="operation" title="Unarchive" onClick={onClick} />;
+const operationClasses = disabled => `operation ${disabled ? 'operation--disabled' : ''}`;
+
+
+export const Unarchive = ({ onClick, disabled = false }) =>
+  <MdUnarchive className={operationClasses(disabled)} title="Unarchive" onClick={onClick} />;
 
 Unarchive.propTypes = clickProps;
 
-export const Archive = ({ onClick }) =>
-  <MdArchive className="operation" title="Archive" onClick={onClick} />;
+export const Archive = ({ onClick, disabled = false }) =>
+  <MdArchive className={operationClasses(disabled)} title="Archive" onClick={onClick} />;
 
 Archive.propTypes = clickProps;
 
-export const Favorite = ({ onClick }) =>
-  <MdStarBorder className="operation" title="Favorite" onClick={onClick} />;
+export const Favorite = ({ onClick, disabled = false }) =>
+  <MdStarBorder className={operationClasses(disabled)} title="Favorite" onClick={onClick} />;
 
 Favorite.propTypes = clickProps;
 
-export const Unfavorite = ({ onClick }) =>
-  <MdStar className="operation" title="Unfavorite" onClick={onClick} />;
+export const Unfavorite = ({ onClick, disabled = false }) =>
+  <MdStar className={operationClasses(disabled)} title="Unfavorite" onClick={onClick} />;
 
 Unfavorite.propTypes = clickProps;
 
@@ -53,12 +56,12 @@ function confirmDelete(performDelete) {
   }
 }
 
-export const Delete = ({ onClick }) =>
-  <MdDelete className="operation" title="Delete" onClick={confirmDelete(onClick)} />;
+export const Delete = ({ onClick, disabled = false }) =>
+  <MdDelete className={operationClasses(disabled)} title="Delete" onClick={confirmDelete(onClick)} />;
 
 Delete.propTypes = clickProps;
 
-const TagInput = ({ tags, onSave, title }) => {
+const TagInput = ({ tags, onSave, title, disabled = false }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onSaveFromModal = useCallback(tags => {
@@ -76,7 +79,7 @@ const TagInput = ({ tags, onSave, title }) => {
         onDismiss={() => setIsOpen(false)}
       />
 
-      <AiFillTag className="operation" title="Add tag" onClick={() => setIsOpen(!isOpen)} />
+      <AiFillTag className={operationClasses(disabled)} title="Add tag" onClick={() => setIsOpen(!isOpen)} />
     </>
   )
 }
@@ -87,5 +90,5 @@ TagInput.propTypes = {
   title: PropTypes.string.isRequired
 };
 
-export const EditTags = ({ tags, onSave, title }) => <TagInput tags={tags} onSave={onSave} title={title} />;
+export const EditTags = props => <TagInput {...props} />;
 EditTags.propTypes = TagInput.propTypes;

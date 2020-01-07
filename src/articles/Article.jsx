@@ -27,6 +27,7 @@ const Article = ({article, onTagClick, onTagRemove, bulkEditEnabled, toggleArtic
         href={article.url}
         target="_blank"
         rel="noopener noreferrer"
+        title={article.origin}
       >
         {article.title}
       </a>

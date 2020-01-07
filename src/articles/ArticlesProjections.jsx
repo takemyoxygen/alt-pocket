@@ -87,9 +87,9 @@ const ArticleProjections = ({
         </div>
       </div>
 
-      {bulkEditEnabled && selectedArticles.length > 0 ? (
+      {bulkEditEnabled ? (
         <div className="article-list-bulk-operations">
-          <BulkOperations articles={selectedArticles} />
+          <BulkOperations articles={selectedArticles} disabled={selectedArticles.length === 0} />
         </div>
       ) : null}
 
