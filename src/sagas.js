@@ -1,4 +1,4 @@
-import {partition, values, without} from 'lodash';
+import {partition, values, without, sortBy, identity} from 'lodash';
 import {compose} from 'lodash/fp';
 import {call, put, select, takeEvery, takeLatest} from 'redux-saga/effects';
 import * as apiClient from './data/apiClient';
@@ -34,6 +34,8 @@ function* onDelete({articles}) {
     yield put({type: actionTypes.UPDATE_ARTICLES, articles});
   }
 }
+
+const sortTags = tags =>  tags ? sortBy(tags, identity) : tags;
 
 function createArticlesUpdateSaga(updateLocal, updateRemote) {
 
@@ -86,12 +88,12 @@ export function* rootSaga() {
   ));
 
   yield takeEvery(actionTypes.SAVE_TAGS, createArticlesUpdateSaga(
-    (a, {tags}) => ({...a, tags}),
+    (a, {tags}) => ({...a, tags: sortTags(tags)}),
     (articles, {tags}) => apiClient.replaceTags(pickIds(articles), tags),
   ));
 
   yield takeEvery(actionTypes.ADD_TAGS, createArticlesUpdateSaga(
-    (a, {tags}) => ({...a, tags: [...a.tags, ...tags]}),
+    (a, {tags}) => ({...a, tags: sortTags([...a.tags, ...tags])}),
     (articles, {tags}) => apiClient.addTags(pickIds(articles), tags),
   ));
 
