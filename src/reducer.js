@@ -100,6 +100,19 @@ export default function (state, action) {
       };
     }
 
+    case actionTypes.CLEAR_ALL_ARTICLES: {
+      return {
+        ...state,
+        articles: {},
+        since: null,
+        bulkEdit: {
+          ...state.bulkEdit,
+          enabled: false,
+          selectedArticles: {}
+        }
+      }
+    }
+
     default:
       return state
   }

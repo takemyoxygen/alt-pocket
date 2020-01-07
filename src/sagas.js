@@ -58,6 +58,11 @@ function createArticlesUpdateSaga(updateLocal, updateRemote) {
 
 const pickIds = xs => xs.map(x => x.id);
 
+function* onReloadAll() {
+  yield put({type: actionTypes.CLEAR_ALL_ARTICLES});
+  yield put({type: actionTypes.SYNC});
+}
+
 export function* rootSaga() {
   yield takeEvery(actionTypes.INIT, onInit);
   yield takeLatest(actionTypes.SYNC, syncArticles);
@@ -98,4 +103,6 @@ export function* rootSaga() {
   ));
 
   yield takeEvery(actionTypes.REQUEST_DELETE_ARTICLES, onDelete);
+
+  yield takeEvery(actionTypes.RELOAD_ALL_ARTICLES, onReloadAll);
 }

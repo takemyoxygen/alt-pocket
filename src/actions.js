@@ -13,7 +13,9 @@ export const actionTypes = {
   ADD_TAGS: 'articles:add-tags',
   TOGGLE_PROJECTION: 'projection:toggle',
   TOGGLE_BULK_EDIT: 'bulk-edit:toggle',
-  TOGGLE_ARTICLE_SELECTED: 'bulk-edit:toggle-article'
+  TOGGLE_ARTICLE_SELECTED: 'bulk-edit:toggle-article',
+  RELOAD_ALL_ARTICLES: 'reload',
+  CLEAR_ALL_ARTICLES: 'clear'
 }
 
 export default {
@@ -63,5 +65,9 @@ export default {
 
   toggleArticleSelected(article) {
     return {type: actionTypes.TOGGLE_ARTICLE_SELECTED, articleId: article.id};
+  },
+
+  reloadAll() {
+    return {type: actionTypes.RELOAD_ALL_ARTICLES};
   }
 }

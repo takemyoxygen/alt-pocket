@@ -14,7 +14,8 @@ const ArticleProjections = ({
   onProjectionToggled,
   bulkEditEnabled,
   onBulkToggled,
-  selectedArticles
+  selectedArticles,
+  reloadAll
 }) => {
   const [filterText, setFilterText] = useState('');
   const textProjectionRef = useRef();
@@ -83,7 +84,7 @@ const ArticleProjections = ({
             className={bulkEditEnabled ? 'bulk-edit-icon--enabled' : ''}
             onClick={onBulkToggled}
           />
-          <MdRefresh title="Refresh" />
+          <MdRefresh title="Reload all" onClick={reloadAll} />
         </div>
       </div>
 
@@ -110,5 +111,6 @@ export default connect(
   }),
   {
     onProjectionToggled: actions.toggleProjection,
-    onBulkToggled: actions.toggleBulkEdit
+    onBulkToggled: actions.toggleBulkEdit,
+    reloadAll: actions.reloadAll
   })(ArticleProjections);
