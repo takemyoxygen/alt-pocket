@@ -69,5 +69,9 @@ export default {
 
   reloadAll() {
     return {type: actionTypes.RELOAD_ALL_ARTICLES};
+  },
+
+  sync() {
+    return {type: actionTypes.SYNC };
   }
 }

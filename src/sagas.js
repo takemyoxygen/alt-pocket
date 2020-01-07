@@ -14,9 +14,8 @@ function* syncArticles() {
     yield put({type: actionTypes.DELETE_ARTICLES, articleIds: deleted.map(a => a.item_id)});
   }
 
-  if (updated.length > 0) {
-    yield put({type: actionTypes.UPDATE_ARTICLES, articles: updated.map(mapArticle), since: articlesData.since});
-  }
+  // this action should be dispatched even if there are no updated articles just to set new value of "since" field
+  yield put({type: actionTypes.UPDATE_ARTICLES, articles: updated.map(mapArticle), since: articlesData.since});
 }
 
 function* onInit() {
