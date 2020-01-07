@@ -15,14 +15,14 @@
   align-items: center;
   height: 40px;
   align-items: stretch;
+
+  .tags-container:not(:empty) {
+    margin-right: 8px
+  }
 }
 
 .articles-list__article:hover {
   box-shadow: inset 0 1px 1px #dadce0, 0 2px 2px #dadce0;
-}
-
-.articles-list__article:hover .tags-container {
-  display: none;
 }
 
 .articles-list__article__title-link-container {

@@ -1,0 +1,97 @@
+.tags-container {
+  display: flex;
+  align-items: center;
+}
+
+.tags-container .tag:not(:last-child) {
+  margin-right: 8px;
+}
+
+.tag {
+  background: grey;
+  color: white;
+  border-radius: 4px;
+  padding: 0 4px 1px 4px;
+  font-size: 0.9em;
+  white-space: nowrap;
+  display: inline-flex;
+  cursor: pointer;
+
+  &__text {
+    line-height: 20px;
+    text-decoration: underline;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    margin-left: 4px;
+
+    &:hover {
+      opacity: 0.6;
+    }
+
+    svg {
+      height: 16px;
+      width: 16px;
+      margin-bottom: -2px;
+    }
+  }
+}
+
+.tag-input-modal {
+  position: absolute;
+  display: flex;
+  background: white;
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.tag-input-content {
+  padding: 8px;
+
+  &__header {
+    margin: 0;
+    margin-bottom: 8px;
+  }
+
+  &__buttons {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      padding: 4px 8px;
+
+    }
+  }
+}
+
+.react-tags {
+  width: 300px;
+
+  &__selected {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__search-input {
+    display: flex;
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .tag {
+    margin: 0 8px 8px 0;
+  }
+}

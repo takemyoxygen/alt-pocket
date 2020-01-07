@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './Tags.css';
+import './Tags.scss';
 import {GoX} from 'react-icons/go';
 
 const Tag = ({name, onRemove, onClick, showDelete = true}) => (

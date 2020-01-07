@@ -2,7 +2,7 @@ import React, {useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import ReactTags from 'react-tag-autocomplete'
-import './Tags.css';
+import './Tags.scss';
 import Tag from './Tag';
 
 const KeyCodes = {

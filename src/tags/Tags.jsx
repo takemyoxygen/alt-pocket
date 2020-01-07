@@ -1,18 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tag from './Tag';
-import './Tags.css';
+import './Tags.scss';
 
-const Tags = ({names, onClick, onRemove}) => (
+const Tags = ({names, onClick, onRemove, showDelete}) => (
   <div className="tags-container">
-    {names.map(name => <Tag showDelete={false} name={name} key={name} onClick={onClick} onRemove={onRemove}/>)}
+    {names.map(name => <Tag showDelete={showDelete} name={name} key={name} onClick={onClick} onRemove={onRemove}/>)}
   </div>
 );
 
 Tags.propTypes = {
   names: PropTypes.arrayOf(PropTypes.string).isRequired,
   onClick: PropTypes.func,
-  onRemove: PropTypes.func.isRequired
+  onRemove: PropTypes.func.isRequired,
+  showDelete: PropTypes.bool.isRequired
 };
 
 export default Tags;

@@ -12,6 +12,15 @@ const Article = ({article, onTagClick, onTagRemove, bulkEditEnabled, toggleArtic
       </div>
     ) : null}
 
+    {article.tags && article.tags.length > 0 ?
+      <Tags
+        onClick={onTagClick}
+        onRemove={onTagRemove}
+        names={article.tags}
+        showDelete={false}
+      />
+      : null}
+
     <div className="articles-list__article__title-link-container">
       <a
         className="articles-list__article__title-link"
@@ -22,14 +31,6 @@ const Article = ({article, onTagClick, onTagRemove, bulkEditEnabled, toggleArtic
         {article.title}
       </a>
     </div>
-
-    {article.tags ?
-      <Tags
-        onClick={onTagClick}
-        onRemove={onTagRemove}
-        names={article.tags}
-      />
-      : null}
 
     <ArticleOperations article={article}/>
 

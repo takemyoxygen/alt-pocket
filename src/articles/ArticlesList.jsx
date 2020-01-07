@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './ArticlesList.css';
+import './ArticlesList.scss';
 import Article from './Article';
 import {connect} from 'react-redux';
 import {combine, tagFilter} from '../projections';
