@@ -12,9 +12,15 @@ import actions from './actions';
 import {throttle} from 'lodash';
 import { rootSaga } from './sagas';
 
+const middlewares = [];
 const sagaMiddleware = createSagaMiddleware();
+middlewares.push(sagaMiddleware);
 
-const store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware, logger));
+if (process.env.NODE_ENV === 'development') {
+  middlewares.push(logger);
+}
+
+const store = createStore(reducer, initialState, applyMiddleware(...middlewares));
 sagaMiddleware.run(rootSaga);
 
 const pickPersistableState = ({articles, since}) => ({articles, since});
