@@ -73,12 +73,9 @@ export function requireAccessToken() {
   return accessToken;
 }
 
-export const authorized = () => !!getAccessToken();
-
-export async function authorize() {
-  const accessToken = localStorage.getItem('access-token');
-  if (accessToken) {
-    return;
+export async function authorized() {
+  if (getAccessToken()) {
+    return true;
   }
 
   const url = new URL(window.location);
@@ -89,7 +86,12 @@ export async function authorize() {
     storeAccessToken(accessToken);
     url.searchParams.delete('request-token');
     window.location = url.href;
-  } else {
-    getRequestToken().then(redirectToAuthPage);
+    return true;
   }
+
+  return false;
+}
+
+export async function authorize() {
+  getRequestToken().then(redirectToAuthPage);
 }

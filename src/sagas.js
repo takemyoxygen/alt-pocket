@@ -4,6 +4,7 @@ import {call, put, select, takeEvery, takeLatest} from 'redux-saga/effects';
 import * as apiClient from './data/apiClient';
 import {mapArticle} from './data/converter';
 import {actionTypes} from './actions';
+import { authorize } from './utils/auth';
 
 function* syncArticles() {
   const since = yield select(state => state.since);
@@ -62,6 +63,10 @@ function* onReloadAll() {
   yield put({type: actionTypes.SYNC});
 }
 
+function* onLogin() {
+  yield call(authorize);
+}
+
 export function* rootSaga() {
   yield takeEvery(actionTypes.INIT, onInit);
   yield takeLatest(actionTypes.SYNC, syncArticles);
@@ -104,4 +109,6 @@ export function* rootSaga() {
   yield takeEvery(actionTypes.REQUEST_DELETE_ARTICLES, onDelete);
 
   yield takeEvery(actionTypes.RELOAD_ALL_ARTICLES, onReloadAll);
+
+  yield takeEvery(actionTypes.LOGIN, onLogin);
 }

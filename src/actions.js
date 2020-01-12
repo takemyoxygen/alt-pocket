@@ -15,7 +15,8 @@ export const actionTypes = {
   TOGGLE_BULK_EDIT: 'bulk-edit:toggle',
   TOGGLE_ARTICLE_SELECTED: 'bulk-edit:toggle-article',
   RELOAD_ALL_ARTICLES: 'reload',
-  CLEAR_ALL_ARTICLES: 'clear'
+  CLEAR_ALL_ARTICLES: 'clear',
+  LOGIN: 'login'
 }
 
 export default {
@@ -73,5 +74,9 @@ export default {
 
   sync() {
     return {type: actionTypes.SYNC };
+  },
+
+  login() {
+    return {type: actionTypes.LOGIN};
   }
 }

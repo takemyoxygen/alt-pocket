@@ -15,3 +15,16 @@ html, body, #root {
   flex-direction: column;
   height: 100%;
 }
+
+.login-container {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.login-button {
+  font-size: 1.1em;
+  padding: 8px 16px;
+  cursor: pointer;
+}
