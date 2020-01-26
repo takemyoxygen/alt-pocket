@@ -34,9 +34,9 @@ function redirectToAuthPage(requestToken) {
     `https://getpocket.com/auth/authorize?request_token=${requestToken}&redirect_uri=${encodeURIComponent(redirectUrl(requestToken))}`;
 }
 
-function storeAccessToken(accessToken) {
-  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-}
+// function storeAccessToken(accessToken) {
+//   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+// }
 
 function getAccessToken() {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -73,25 +73,33 @@ export function requireAccessToken() {
   return accessToken;
 }
 
-export async function authorized() {
-  if (getAccessToken()) {
-    return true;
-  }
-
+export async function tryCompleteAuth() {
   const url = new URL(window.location);
   const requestToken = url.searchParams.get('request-token');
 
   if (requestToken) {
     const accessToken = await obtainAccessToken(requestToken);
-    storeAccessToken(accessToken);
+    // storeAccessToken(accessToken);
     url.searchParams.delete('request-token');
-    window.location = url.href;
+    window.history.replaceState({}, document.title, url.pathname);
+    return accessToken;
+  }
+
+  return null;
+}
+
+export async function authorized() {
+  if (getAccessToken()) {
     return true;
   }
 
-  return false;
+  return !!(await tryCompleteAuth());
 }
 
 export async function authorize() {
   getRequestToken().then(redirectToAuthPage);
+}
+
+export function logout () {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
 }

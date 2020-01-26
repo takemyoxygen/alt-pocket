@@ -1,12 +1,11 @@
-import {requireAccessToken} from '../utils/auth';
 import {corsProxy} from '../ajax';
 import { getConfig } from '../utils/config';
 
-export async function fetchArticlesData(since = undefined) {
+export async function fetchArticlesData(accessToken, since = undefined) {
   const {consumerKey} = await getConfig();
 
   const body = {
-    access_token: requireAccessToken(),
+    access_token: accessToken,
     consumer_key: consumerKey,
     detailType: 'complete',
     state: 'all',
@@ -24,12 +23,12 @@ export async function fetchArticlesData(since = undefined) {
   return response.json();
 }
 
-async function sendCommands(commands) {
+async function sendCommands(accessToken, commands) {
   const {consumerKey} = await getConfig();
 
   const body = {
     consumer_key: consumerKey,
-    access_token: requireAccessToken(),
+    access_token: accessToken,
     actions: commands
   }
 
@@ -48,42 +47,42 @@ async function sendCommands(commands) {
   return response.json();
 }
 
-export async function sendCommand(command, ids, payload = {}) {
-  return sendCommands(ids.map(id => ({
+export async function sendCommand(accessToken, command, ids, payload = {}) {
+  return sendCommands(accessToken, ids.map(id => ({
     action: command,
     item_id: id,
     ...payload
   })));
 }
 
-export function archive(ids) {
-  return sendCommand('archive', ids);
+export function archive(ids, accessToken) {
+  return sendCommand(accessToken, 'archive', ids);
 }
 
-export function readd(ids) {
-  return sendCommand('readd', ids);
+export function readd(ids, accessToken) {
+  return sendCommand(accessToken, 'readd', ids);
 }
 
-export function remove(ids) {
-  return sendCommand('delete', ids);
+export function remove(ids, accessToken) {
+  return sendCommand(accessToken, 'delete', ids);
 }
 
-export function favorite(ids) {
-  return sendCommand('favorite', ids);
+export function favorite(ids, accessToken) {
+  return sendCommand(accessToken, 'favorite', ids);
 }
 
-export function unfavorite(ids) {
-  return sendCommand('unfavorite', ids);
+export function unfavorite(ids, accessToken) {
+  return sendCommand(accessToken, 'unfavorite', ids);
 }
 
-export function removeTag(ids, tag) {
-  return sendCommand('tags_remove', ids, {tags: tag});
+export function removeTag(ids, tag, accessToken) {
+  return sendCommand(accessToken, 'tags_remove', ids, {tags: tag});
 }
 
-export function replaceTags(ids, tags) {
-  return sendCommand('tags_replace', ids, {tags: tags.join(',')});
+export function replaceTags(ids, tags, accessToken) {
+  return sendCommand(accessToken, 'tags_replace', ids, {tags: tags.join(',')});
 }
 
-export function addTags(ids, tags) {
-  return sendCommand('tags_add', ids, {tags: tags.join(',')});
+export function addTags(ids, tags, accessToken) {
+  return sendCommand(accessToken, 'tags_add', ids, {tags: tags.join(',')});
 }

@@ -47,30 +47,6 @@
   margin: 8px 0;
 }
 
-.article-list-operations {
-  display: flex;
-  align-items: center;
-
-  svg {
-    height: 20px;
-    width: 20px;
-    cursor: pointer;
-
-    &:not(:last-child) {
-      margin-right: 8px;;
-    }
-
-    &:hover {
-      opacity: 0.5;
-    }
-  }
-}
-
-.bulk-edit-icon--enabled {
-  background: black;
-  fill: white;
-}
-
 .article-list-bulk-operations {
   margin-top: 8px;
 }

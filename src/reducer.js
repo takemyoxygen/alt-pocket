@@ -5,8 +5,11 @@ import {unread} from './projections';
 const defaultProjection = unread;
 
 export const initialState = {
+  initialized: false,
   articles: {},
   since: null,
+  accessToken: '',
+  authInProgress: false,
   projections: [defaultProjection],
   bulkEdit: {
     enabled: false,
@@ -19,7 +22,8 @@ export default function (state, action) {
     case actionTypes.INIT: {
       return {
         ...state,
-        ...action.state
+        ...action.state,
+        initialized: true,
       }
     }
 
@@ -111,6 +115,21 @@ export default function (state, action) {
           selectedArticles: {}
         }
       }
+    }
+
+    case actionTypes.START_AUTH: {
+      return {
+        ...state,
+        authInProgress: true
+      };
+    }
+
+    case actionTypes.COMPLETE_AUTH: {
+      return {
+        ...state,
+        authInProgress: false,
+        accessToken: action.accessToken
+      };
     }
 
     default:

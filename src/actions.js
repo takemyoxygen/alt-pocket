@@ -16,7 +16,10 @@ export const actionTypes = {
   TOGGLE_ARTICLE_SELECTED: 'bulk-edit:toggle-article',
   RELOAD_ALL_ARTICLES: 'reload',
   CLEAR_ALL_ARTICLES: 'clear',
-  LOGIN: 'login'
+  LOGIN: 'login',
+  LOGOUT: 'logout',
+  START_AUTH: 'auth:start',
+  COMPLETE_AUTH: 'auth:complete'
 }
 
 export default {
@@ -78,5 +81,17 @@ export default {
 
   login() {
     return {type: actionTypes.LOGIN};
+  },
+
+  logout() {
+    return {type: actionTypes.LOGOUT};
+  },
+
+  startAuth() {
+    return {type: actionTypes.START_AUTH};
+  },
+
+  completeAuth(accessToken){
+    return {type: actionTypes.COMPLETE_AUTH, accessToken};
   }
 }

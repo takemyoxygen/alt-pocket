@@ -6,7 +6,6 @@ import './ArticlesProjections.scss';
 import { connect } from 'react-redux';
 import actions from './../actions';
 import Tags from './../tags/Tags';
-import { MdRefresh, MdCloudDownload, TiPencil } from 'react-icons/all';
 import BulkOperations from '../operations/BulkOperations';
 
 const ArticleProjections = ({
@@ -77,16 +76,6 @@ const ArticleProjections = ({
             value={filterText}
             onChange={onFilterTextChange}
           />
-        </div>
-
-        <div className="article-list-operations">
-          <TiPencil
-            title="Bulk edit"
-            className={bulkEditEnabled ? 'bulk-edit-icon--enabled' : ''}
-            onClick={onBulkToggled}
-          />
-          <MdCloudDownload title="Sync" onClick={sync}/>
-          <MdRefresh title="Reload all" onClick={reloadAll} />
         </div>
       </div>
 
