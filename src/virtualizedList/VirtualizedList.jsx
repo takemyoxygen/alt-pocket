@@ -27,7 +27,9 @@ const VirtualizedList = ({ items, className, renderItem, itemHeight }) => {
   }
 
   const viewPortRef = useCallback(element => {
-    setViewPortHeight(element.clientHeight);
+    if (element) {
+      setViewPortHeight(element.clientHeight);
+    }
   }, [])
 
   const viewPortStyle = useMemo(

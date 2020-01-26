@@ -1,14 +1,13 @@
-import {corsProxy} from '../ajax';
-import {getConfig} from './config'
+import { corsProxy } from '../ajax';
+import { getConfig } from './config'
 
 const home = window.location.href;
-const ACCESS_TOKEN_KEY = 'access-token';
 
 const redirectUrl = reqToken => `${home}?request-token=${reqToken}`;
 
 async function getRequestToken() {
 
-  const {consumerKey} = await getConfig();
+  const { consumerKey } = await getConfig();
 
   const requestBody = {
     consumer_key: consumerKey,
@@ -34,17 +33,9 @@ function redirectToAuthPage(requestToken) {
     `https://getpocket.com/auth/authorize?request_token=${requestToken}&redirect_uri=${encodeURIComponent(redirectUrl(requestToken))}`;
 }
 
-// function storeAccessToken(accessToken) {
-//   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-// }
-
-function getAccessToken() {
-  return localStorage.getItem(ACCESS_TOKEN_KEY);
-}
-
 async function obtainAccessToken(requestToken) {
 
-  const {consumerKey} = await getConfig();
+  const { consumerKey } = await getConfig();
 
   const requestBody = {
     consumer_key: consumerKey,
@@ -64,22 +55,12 @@ async function obtainAccessToken(requestToken) {
   return jsonResponse.access_token;
 }
 
-export function requireAccessToken() {
-  const accessToken = getAccessToken();
-  if (!accessToken) {
-    throw new Error('No access token found');
-  }
-
-  return accessToken;
-}
-
 export async function tryCompleteAuth() {
   const url = new URL(window.location);
   const requestToken = url.searchParams.get('request-token');
 
   if (requestToken) {
     const accessToken = await obtainAccessToken(requestToken);
-    // storeAccessToken(accessToken);
     url.searchParams.delete('request-token');
     window.history.replaceState({}, document.title, url.pathname);
     return accessToken;
@@ -88,18 +69,6 @@ export async function tryCompleteAuth() {
   return null;
 }
 
-export async function authorized() {
-  if (getAccessToken()) {
-    return true;
-  }
-
-  return !!(await tryCompleteAuth());
-}
-
 export async function authorize() {
   getRequestToken().then(redirectToAuthPage);
-}
-
-export function logout () {
-  localStorage.removeItem(ACCESS_TOKEN_KEY);
 }

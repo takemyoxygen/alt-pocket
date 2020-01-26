@@ -132,6 +132,17 @@ export default function (state, action) {
       };
     }
 
+    case actionTypes.LOGOUT: {
+      return {
+        ...state,
+        accessToken: initialState.accessToken,
+        articles: initialState.articles,
+        since: initialState.since,
+        projection: initialState.projection,
+        bulkEdit: initialState.bulkEdit
+      }
+    }
+
     default:
       return state
   }
