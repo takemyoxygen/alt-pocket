@@ -1,6 +1,6 @@
 async function  actuallyLoadConfig() {
-  if (process.env.REACT_APP_API_CONSUMER_KEY) {
-    return {consumerKey: process.env.REACT_APP_API_CONSUMER_KEY } ;
+  if (process.env.CONSUMER_KEY) {
+    return {consumerKey: process.env.CONSUMER_KEY } ;
   }
 
   const response = await fetch('/config');
