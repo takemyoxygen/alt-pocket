@@ -6,12 +6,11 @@ COPY package.json package-lock.json ./
 RUN npm ci --no-progress
 
 COPY ./src ./src
-COPY ./public ./public
 RUN npm run build
 
 FROM nginx:latest
 
-COPY --from=0 /usr/src/app/build /var/www
+COPY --from=0 /usr/src/app/dist /var/www
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf.template
 COPY ./scripts/docker-entrypoint.sh ./

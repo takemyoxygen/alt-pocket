@@ -11,4 +11,7 @@ jobs:
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u takemyoxygen --password-stdin
         docker build . --file Dockerfile --tag takemyoxygen/alt-pocket:$(date +%s) --tag takemyoxygen/alt-pocket:latest
-        docker push takemyoxygen/alt-pocket
+        if [ ${{github.ref}} = 'refs/heads/master' ]
+        then
+          docker push takemyoxygen/alt-pocket
+        fi
