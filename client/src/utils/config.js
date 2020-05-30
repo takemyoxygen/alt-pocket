@@ -3,7 +3,9 @@ async function  actuallyLoadConfig() {
     return {consumerKey: process.env.CONSUMER_KEY } ;
   }
 
-  const response = await fetch('/config');
+  const configUrl = new URL('/api/config', process.env.API_BASE_URI);
+  const response = await fetch(configUrl.href);
+  
   return response.json();
 }
 
