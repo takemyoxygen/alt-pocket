@@ -10,6 +10,7 @@ jobs:
     - name: Build the Docker image
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u takemyoxygen --password-stdin
+        cd client
         docker build . --file Dockerfile --tag takemyoxygen/alt-pocket:$(date +%s) --tag takemyoxygen/alt-pocket:latest
         if [ ${{github.ref}} = 'refs/heads/master' ]
         then
