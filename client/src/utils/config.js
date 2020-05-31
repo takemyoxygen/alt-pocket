@@ -1,20 +1,11 @@
-async function  actuallyLoadConfig() {
-  if (process.env.CONSUMER_KEY) {
-    return {consumerKey: process.env.CONSUMER_KEY } ;
-  }
+let apiBaseUrl = process.env.API_BASE_URI || `${window.location.origin}/api`;
 
-  const configUrl = new URL('/api/config', process.env.API_BASE_URI);
-  const response = await fetch(configUrl.href);
-  
-  return response.json();
+if (!apiBaseUrl.endsWith('/')) {
+  apiBaseUrl += '/';
 }
 
-let configPromise = null;
-
-export function getConfig() {
-  if (!configPromise) {
-    configPromise = actuallyLoadConfig();
-  }
-
-  return configPromise;
-}
+export default {
+  consumerKey: process.env.CONSUMER_KEY,
+  apiBaseUrl,
+  useCorsProxy: !!process.env.USE_CORS_PROXY || false
+};
