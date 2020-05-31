@@ -6,13 +6,12 @@ export async function fetchArticlesData(accessToken, since = undefined) {
 
   const body = {
     access_token: accessToken,
-    consumer_key: consumerKey,
     detailType: 'complete',
     state: 'all',
     since
   }
 
-  const response = await fetch(corsProxy('https://getpocket.com/v3/get'), {
+  const response = await fetch('http://localhost:5000/api/v3/get', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
