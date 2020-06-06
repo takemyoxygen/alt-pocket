@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -11,9 +12,12 @@ namespace AltPocket.Web.Utils
     {
         private readonly HttpResponseMessage responseMessage;
 
-        public HttpResponseMessageResult(HttpResponseMessage responseMessage)
+        private readonly ISet<string> headersBlackList;
+
+        public HttpResponseMessageResult(HttpResponseMessage responseMessage, ISet<string> headersBlackList)
         {
-            this.responseMessage = responseMessage; // could add throw if null
+            this.responseMessage = responseMessage;
+            this.headersBlackList = headersBlackList;
         }
 
         public async Task ExecuteResultAsync(ActionContext context)
@@ -22,6 +26,7 @@ namespace AltPocket.Web.Utils
 
             foreach (var header in responseMessage.Headers)
             {
+                if (!this.headersBlackList.Contains(header.Key))
                 context.HttpContext.Response.Headers.TryAdd(header.Key, new StringValues(header.Value.ToArray()));
             }
 
