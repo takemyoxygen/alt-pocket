@@ -1,22 +1,25 @@
-FROM node:12-alpine
+FROM node:12 as build-client
+WORKDIR /app
 
-WORKDIR /usr/src/app
-
-COPY package.json package-lock.json ./
+COPY ./client/package.json ./client/package-lock.json ./
 RUN npm ci --no-progress
 
-COPY ./src ./src
+COPY ./client/src ./src
 RUN npm run build
 
-FROM nginx:latest
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-server
+WORKDIR /app
 
-COPY --from=0 /usr/src/app/dist /var/www
+COPY ./server/src/AltPocket.Web/AltPocket.Web.csproj ./
+RUN dotnet restore
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf.template
-COPY ./scripts/docker-entrypoint.sh ./
+COPY ./server/src/AltPocket.Web/ ./
+RUN dotnet publish -c Release -o out
 
-RUN ["chmod", "+x", "./docker-entrypoint.sh"]
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /app
 
-ENTRYPOINT [ "./docker-entrypoint.sh" ]
+COPY --from=build-server /app/out .
+COPY --from=build-client /app/dist ./wwwroot
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["dotnet", "AltPocket.Web.dll"]

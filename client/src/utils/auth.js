@@ -1,5 +1,4 @@
-import { corsProxy } from '../ajax';
-import { getConfig } from './config'
+import { makeRequest } from '../data/apiClient';
 
 const home = window.location.href;
 
@@ -7,20 +6,16 @@ const redirectUrl = reqToken => `${home}?request-token=${reqToken}`;
 
 async function getRequestToken() {
 
-  const { consumerKey } = await getConfig();
-
-  const requestBody = {
-    consumer_key: consumerKey,
+  const body = {
     redirect_uri: home
   };
 
-  const response = await fetch((corsProxy('https://getpocket.com/v3/oauth/request')), {
+  const response = await makeRequest('v3/oauth/request', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json; charset=UTF8',
       'X-Accept': 'application/json'
     },
-    body: JSON.stringify(requestBody)
+    body
   });
 
   const jsonResponse = await response.json();
@@ -34,21 +29,16 @@ function redirectToAuthPage(requestToken) {
 }
 
 async function obtainAccessToken(requestToken) {
-
-  const { consumerKey } = await getConfig();
-
-  const requestBody = {
-    consumer_key: consumerKey,
+  const body = {
     code: requestToken
   };
 
-  const response = await fetch((corsProxy('https://getpocket.com/v3/oauth/authorize')), {
-    method: 'POST',
+  const response = await makeRequest('v3/oauth/authorize', {
+    method:'POST',
     headers: {
-      'Content-Type': 'application/json; charset=UTF8',
       'X-Accept': 'application/json'
     },
-    body: JSON.stringify(requestBody)
+    body
   });
 
   const jsonResponse = await response.json();

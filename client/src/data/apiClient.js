@@ -1,43 +1,53 @@
 import {corsProxy} from '../ajax';
-import { getConfig } from '../utils/config';
+import config from '../utils/config';
+
+export function makeRequest(relativeUrl, options) {
+  const apiFullUrl = new URL(relativeUrl, config.apiBaseUrl);
+
+  const requestUrl = config.useCorsProxy ? corsProxy(apiFullUrl.href) : apiFullUrl.href;
+
+  if (options.body && config.consumerKey) {
+    options.body.consumer_key = config.consumerKey;
+  }
+
+  const requestOptions = {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers
+    },
+    body: JSON.stringify(options.body)
+  }
+
+  return fetch(requestUrl, requestOptions);
+}
 
 export async function fetchArticlesData(accessToken, since = undefined) {
-  const {consumerKey} = await getConfig();
 
   const body = {
     access_token: accessToken,
-    consumer_key: consumerKey,
     detailType: 'complete',
     state: 'all',
     since
   }
 
-  const response = await fetch(corsProxy('https://getpocket.com/v3/get'), {
+  const response = await makeRequest('v3/get', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
+    body
   });
 
   return response.json();
 }
 
 async function sendCommands(accessToken, commands) {
-  const {consumerKey} = await getConfig();
-
   const body = {
-    consumer_key: consumerKey,
     access_token: accessToken,
     actions: commands
   }
 
-  const response = await fetch(corsProxy('https://getpocket.com/v3/send'), {
+  const response = await makeRequest('v3/send', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
+    body
   });
 
   if (!response.ok) {

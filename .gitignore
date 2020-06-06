@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.jsk
 
@@ -9,7 +9,10 @@
 /coverage
 
 # production
-/dist
+dist
+bin
+obj
+wwwroot
 
 # misc
 .cache
@@ -20,15 +23,3 @@
 .env.production.local
 
 npm-debug.log*
-
-# See https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
-
-# Generated files
-.idea/**/contentModel.xml
-/.idea/$CACHE_FILE$

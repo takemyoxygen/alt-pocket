@@ -1,6 +1,7 @@
-.idea
+**/bin
+**/obj
+**/dist
+**/node_modules
 .vscode
 .github
-node_modules
-build
-.env.local
+.cache
