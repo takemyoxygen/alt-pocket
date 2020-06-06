@@ -1,7 +1,7 @@
 import {corsProxy} from '../ajax';
 import config from '../utils/config';
 
-function makeRequest(relativeUrl, options) {
+export function makeRequest(relativeUrl, options) {
   const apiFullUrl = new URL(relativeUrl, config.apiBaseUrl);
 
   const requestUrl = config.useCorsProxy ? corsProxy(apiFullUrl.href) : apiFullUrl.href;
