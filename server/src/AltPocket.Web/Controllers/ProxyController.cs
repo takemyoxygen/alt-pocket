@@ -85,6 +85,8 @@ namespace AltPocket.Web.Controllers
 
       var response = await httpClient.SendAsync(requestMsg);
 
+      this.logger.LogInformation("Received response with status code {0}", response.StatusCode);
+
       this.HttpContext.Response.RegisterForDispose(response);
 
       return new HttpResponseMessageResult(response, this.headersBlacklistToClient);

@@ -22,7 +22,6 @@ namespace AltPocket.Web
             if (env.IsDevelopment())
             {
                 app
-                    .UseDeveloperExceptionPage()
                     .UseCors(policy =>
                     {
                         policy.WithOrigins("*").WithMethods("*").WithHeaders("*");
@@ -30,6 +29,7 @@ namespace AltPocket.Web
             }
 
             app
+                .UseDeveloperExceptionPage()
                 .UseDefaultFiles()
                 .UseStaticFiles()
                 .UseRouting()
