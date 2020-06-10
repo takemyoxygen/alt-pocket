@@ -87,6 +87,23 @@ namespace AltPocket.Web.Controllers
 
       this.logger.LogInformation("Received response with status code {0}", response.StatusCode);
 
+      if (!response.IsSuccessStatusCode)
+      {
+          var headersString = string.Join(
+            Environment.NewLine,
+            response.Headers.Select(pair => $"{pair.Key}: {string.Join(",", pair.Value)}")
+          );
+
+          this.logger.LogWarning(
+            "Request to {0} failed with status code {1}{2}. Headers:{3}{4}",
+             url,
+             response.StatusCode,
+             response.ReasonPhrase,
+             Environment.NewLine,
+             headersString
+          );
+      }
+
       this.HttpContext.Response.RegisterForDispose(response);
 
       return new HttpResponseMessageResult(response, this.headersBlacklistToClient);
