@@ -12,8 +12,10 @@ jobs:
       with:
         token: ${{secrets.github_token}}
 
-    - uses: actions/checkout@v1
-      name: Build the Docker image
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build the Docker image
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u takemyoxygen --password-stdin
         docker build . --file Dockerfile --tag takemyoxygen/alt-pocket:$BUILD_NUMBER --build-arg BUILD_NUMBER=$BUILD_NUMBER --tag takemyoxygen/alt-pocket:latest
