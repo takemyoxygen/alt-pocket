@@ -8,13 +8,14 @@ COPY ./client/src ./src
 RUN npm run build
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-server
+ARG BUILD_NUMBER=local
 WORKDIR /app
 
 COPY ./server/src/AltPocket.Web/AltPocket.Web.csproj ./
 RUN dotnet restore
 
 COPY ./server/src/AltPocket.Web/ ./
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o out --version-suffix ${BUILD_NUMBER}
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app

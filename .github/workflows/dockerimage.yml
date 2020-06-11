@@ -6,11 +6,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Generate build number
+      id: buildnumber
+      uses: einaregilsson/build-number@v2
+      with:
+        token: ${{secrets.github_token}}
+
     - uses: actions/checkout@v1
-    - name: Build the Docker image
+      name: Build the Docker image
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u takemyoxygen --password-stdin
-        docker build . --file Dockerfile --tag takemyoxygen/alt-pocket:$(date +%s) --tag takemyoxygen/alt-pocket:latest
+        docker build . --file Dockerfile --tag takemyoxygen/alt-pocket:$BUILD_NUMBER --build-arg BUILD_NUMBER=$BUILD_NUMBER --tag takemyoxygen/alt-pocket:latest
         if [ ${{github.ref}} = 'refs/heads/master' ]
         then
           docker push takemyoxygen/alt-pocket
