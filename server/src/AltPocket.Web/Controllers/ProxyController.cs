@@ -43,7 +43,8 @@ namespace AltPocket.Web.Controllers
         "Sec-Fetch-Site",
         "Sec-Fetch-Mode",
         "Sec-Fetch-Dest",
-        "Referer"
+        "Referer",
+        "Host"
       };
 
       this.headersBlacklistToClient = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) {
@@ -69,19 +70,12 @@ namespace AltPocket.Web.Controllers
         requestMsg.Headers.TryAddWithoutValidation(header.Key, header.Value.AsEnumerable());
       }
 
-      if (this.logger.IsEnabled(LogLevel.Debug))
-      {
-        var headersString = string.Join(
-            Environment.NewLine,
-            requestMsg.Headers.Select(pair => $"{pair.Key}: {string.Join(",", pair.Value)}")
-        );
+      var requestHeadersString = string.Join(
+          Environment.NewLine,
+          requestMsg.Headers.Select(pair => $"{pair.Key}: {string.Join(",", pair.Value)}")
+      );
 
-        this.logger.LogDebug("Sending request to {0} with headers{1}{2}", url, Environment.NewLine, headersString);
-      }
-      else
-      {
-        this.logger.LogInformation("Sending request to {0}", url);
-      }
+      this.logger.LogInformation("Sending request to {0} with headers{1}{2}", url, Environment.NewLine, requestHeadersString);
 
       var response = await httpClient.SendAsync(requestMsg);
 
@@ -89,19 +83,19 @@ namespace AltPocket.Web.Controllers
 
       if (!response.IsSuccessStatusCode)
       {
-          var headersString = string.Join(
-            Environment.NewLine,
-            response.Headers.Select(pair => $"{pair.Key}: {string.Join(",", pair.Value)}")
-          );
+        var responseHeadersString = string.Join(
+          Environment.NewLine,
+          response.Headers.Select(pair => $"{pair.Key}: {string.Join(",", pair.Value)}")
+        );
 
-          this.logger.LogWarning(
-            "Request to {0} failed with status code {1}{2}. Headers:{3}{4}",
-             url,
-             response.StatusCode,
-             response.ReasonPhrase,
-             Environment.NewLine,
-             headersString
-          );
+        this.logger.LogWarning(
+          "Request to {0} failed with status code {1}{2}. Headers:{3}{4}",
+           url,
+           response.StatusCode,
+           response.ReasonPhrase,
+           Environment.NewLine,
+           responseHeadersString
+        );
       }
 
       this.HttpContext.Response.RegisterForDispose(response);
