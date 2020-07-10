@@ -28,6 +28,7 @@ jobs:
 
   build-and-deploy:
     runs-on: windows-latest
+    needs: build-front-end
 
     steps:
     - uses: actions/checkout@master
@@ -47,11 +48,11 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: front-end-bundle
+        path: ${{env.DOTNET_ROOT}}/myapp/wwwroot
 
-    - name: Copy front-end bundle to server output
-      run: |
-        mkdir ${{env.DOTNET_ROOT}}/myapp/wwwroot
-        cp client/dist/*.* ${{env.DOTNET_ROOT}}/myapp/wwwroot/
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: ${{env.DOTNET_ROOT}}/myapp
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v1
