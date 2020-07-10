@@ -9,6 +9,24 @@ on:
       - master
 
 jobs:
+  build-front-end:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+        check-latest: true
+    - run: |
+        cd client
+        npm ci --no-progress
+        npm run build
+    - uses: actions/upload-artifact@v1
+      with:
+        name: front-end-bundle
+        path: client/dist
+
   build-and-deploy:
     runs-on: windows-latest
 
@@ -32,4 +50,4 @@ jobs:
         app-name: 'alt-pocket'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_25a403f9e7584f07953af558d46ee20c }}
-        package: ${{env.DOTNET_ROOT}}/myapp 
+        package: ${{env.DOTNET_ROOT}}/myapp
