@@ -43,6 +43,16 @@ jobs:
     - name: dotnet publish
       run: dotnet publish server/src/AltPocket.Web/AltPocket.Web.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+
+    - uses: actions/download-artifact@v1
+      with:
+        name: front-end-bundle
+
+    - name: Copy front-end bundle to server output
+      run: |
+        mkdir ${{env.DOTNET_ROOT}}/myapp/wwwroot
+        cp client/dist/*.* ${{env.DOTNET_ROOT}}/myapp/wwwroot/
+
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v1
       with:
