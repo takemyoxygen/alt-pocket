@@ -22,7 +22,7 @@ namespace AltPocket.Web.Controllers
 
     private readonly string consumerKey;
 
-    private readonly ISet<string> headersBlacklistToUnerlyingApi;
+    private readonly ISet<string> headersWhiteListToUnderlyingApi;
 
     private readonly ISet<string> headersBlacklistToClient;
 
@@ -37,14 +37,8 @@ namespace AltPocket.Web.Controllers
         throw new Exception("Missing required config value: ALT_POCKET_CONSUMER_KEY");
       }
 
-      this.headersBlacklistToUnerlyingApi = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) {
-        "User-Agent",
-        "Origin",
-        "Sec-Fetch-Site",
-        "Sec-Fetch-Mode",
-        "Sec-Fetch-Dest",
-        "Referer",
-        "Host"
+      this.headersWhiteListToUnderlyingApi = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) {
+        "X-Accept"
       };
 
       this.headersBlacklistToClient = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) {
@@ -65,7 +59,7 @@ namespace AltPocket.Web.Controllers
         Content = new StringContent(request.ToString(), Encoding.UTF8, "application/json")
       };
 
-      foreach (var header in this.Request.Headers.Where(h => !this.headersBlacklistToUnerlyingApi.Contains(h.Key)))
+      foreach (var header in this.Request.Headers.Where(h => this.headersWhiteListToUnderlyingApi.Contains(h.Key)))
       {
         requestMsg.Headers.TryAddWithoutValidation(header.Key, header.Value.AsEnumerable());
       }
