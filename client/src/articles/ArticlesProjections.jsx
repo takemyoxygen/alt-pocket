@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import actions from './../actions';
 import Tags from './../tags/Tags';
 import BulkOperations from '../operations/BulkOperations';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
+import ToggleButton from 'react-bootstrap/ToggleButton'
 
 const ArticleProjections = ({
   projections,
@@ -20,6 +22,13 @@ const ArticleProjections = ({
   const [filterText, setFilterText] = useState('');
   const textProjectionRef = useRef();
   const tagProjections = projections.filter(p => p.type === 'tag');
+
+  const selectedQuickProjections = useMemo(
+    () => quickProjections
+      .filter(pr => projections.indexOf(pr) >= 0)
+      .map(pr => quickProjections.indexOf(pr)),
+    [projections]
+  );
 
   useEffect(() => {
     textProjectionRef.current = find(projections, p => p.type === 'text');
@@ -44,20 +53,22 @@ const ArticleProjections = ({
 
   return (
     <div className="articles-projections">
-      <div className="quick-projections">
-        {quickProjections.map(pr => {
-          const selected = projections.indexOf(pr) >= 0;
+      <ToggleButtonGroup type="checkbox" value={selectedQuickProjections}>
+        {quickProjections.map((pr, index) => {
+          const selected = selectedQuickProjections.indexOf(index) >= 0;
           return (
-            <div
+            <ToggleButton
+              className="articles-projections__projection"
+              variant="secondary"
+              value={index}
+              onChange={() => toggleQuickProjection(pr, selected)}
               key={pr.title}
-              onClick={() => toggleQuickProjection(pr, selected)}
-              className={`articles-projections__projection ${selected ? 'articles-projections__projection--selected' : ''}`}
             >
               {pr.title}
-            </div>
+            </ToggleButton>
           )
         })}
-      </div>
+      </ToggleButtonGroup>
 
       {tagProjections.length > 0 ? (
         <div className="tags-filter-projection">
