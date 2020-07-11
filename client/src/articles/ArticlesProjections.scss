@@ -1,31 +1,24 @@
 .articles-projections {
   padding-top: 8px;
   flex: 0 0 auto;
-}
 
-.articles-projections__projection {
-  &.btn:focus, &.btn:active, &.btn.focus {
-    box-shadow: none !important;
+  &__primary {
+    margin-bottom: 8px;
   }
 
-  &:not(.active) {
-    background-color: #6c757d !important;
-  }
-}
+  &__quick {
+    &.btn:focus, &.btn:active, &.btn.focus {
+      box-shadow: none !important;
+    }
 
-.text-filter-and-operations {
-  margin-top: 8px;
-  display: flex;
-}
+    &:not(.active) {
+      background-color: #6c757d !important;
+    }
 
-.text-filter {
-  flex: 1 1 auto;
-  display: flex;
-  margin-right: 8px;
-
-  &__input {
-    flex: 1 1 auto;
-    font-size: 1.1em;
+    &:last-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
   }
 }
 
