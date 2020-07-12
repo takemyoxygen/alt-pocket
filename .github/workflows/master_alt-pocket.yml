@@ -31,6 +31,12 @@ jobs:
     needs: build-front-end
 
     steps:
+    - name: Generate build number
+      id: buildnumber
+      uses: einaregilsson/build-number@v2
+      with:
+        token: ${{secrets.github_token}}
+
     - uses: actions/checkout@master
 
     - name: Set up .NET Core
@@ -39,10 +45,10 @@ jobs:
         dotnet-version: '3.1.102'
 
     - name: Build with dotnet
-      run: dotnet build server/src/AltPocket.Web/AltPocket.Web.csproj --configuration Release
+      run: dotnet build server/src/AltPocket.Web/AltPocket.Web.csproj --configuration Release --version-suffix ${{env.BUILD_NUMBER}}
 
     - name: dotnet publish
-      run: dotnet publish server/src/AltPocket.Web/AltPocket.Web.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      run: dotnet publish server/src/AltPocket.Web/AltPocket.Web.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp --version-suffix ${{env.BUILD_NUMBER}}
 
 
     - uses: actions/download-artifact@v1
