@@ -3,23 +3,18 @@
   align-items: center;
 }
 
+$tag-content-height: 16px;
+
 .tags-container .tag:not(:last-child) {
   margin-right: 8px;
 }
 
 .tag {
-  background: grey;
-  color: white;
-  border-radius: 4px;
-  padding: 0 4px 1px 4px;
-  font-size: 0.9em;
-  white-space: nowrap;
   display: inline-flex;
-  cursor: pointer;
+  align-items: center;
 
   &__text {
-    line-height: 20px;
-    text-decoration: underline;
+    line-height: $tag-content-height;
   }
 
   &__icon {
@@ -32,54 +27,12 @@
     }
 
     svg {
-      height: 16px;
-      width: 16px;
-      margin-bottom: -2px;
-    }
-  }
-}
-
-.tag-input-modal {
-  position: absolute;
-  display: flex;
-  background: white;
-
-  &__overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.tag-input-content {
-  padding: 8px;
-
-  &__header {
-    margin: 0;
-    margin-bottom: 8px;
-  }
-
-  &__buttons {
-    margin-top: 8px;
-    display: flex;
-    justify-content: space-between;
-
-    button {
-      padding: 4px 8px;
-
+      height: $tag-content-height;
     }
   }
 }
 
 .react-tags {
-  width: 300px;
-
   &__selected {
     display: flex;
     flex-wrap: wrap;
