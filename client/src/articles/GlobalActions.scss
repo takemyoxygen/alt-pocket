@@ -1,25 +1,10 @@
-.global-operations {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 8px;
+.header {
+  &__action {
+    display: flex;
+    align-items: center;
 
-  svg {
-    height: 20px;
-    width: 20px;
-    cursor: pointer;
-
-    &:not(:last-child) {
-      margin-right: 8px;;
-    }
-
-    &:hover {
-      opacity: 0.5;
+    svg {
+      margin-right: 8px;
     }
   }
-}
-
-.bulk-edit-icon--enabled {
-  background: black;
-  fill: white;
 }

@@ -7,6 +7,7 @@ import {combine, tagFilter} from '../projections';
 import actions from './../actions';
 import {values, filter, sortBy, compose} from 'lodash/fp';
 import VirtualizedList from '../virtualizedList/VirtualizedList';
+import ListGroup from 'react-bootstrap/ListGroup'
 
 function ArticlesList({
   articles,
@@ -19,17 +20,20 @@ function ArticlesList({
     <VirtualizedList
       className="articles-list"
       items={articles}
-      itemHeight={40}
-      renderItem={article =>
-        <Article
-          bulkEditEnabled={bulkEditEnabled}
-          key={article.id}
-          article={article}
-          onTagClick={onTagClick}
-          onTagRemove={tag => onTagRemove(article, tag)}
-          toggleArticleSelected={() => toggleArticleSelected(article)}
-          selected={!!selectedArticles[article.id]}
-        />}/>
+      itemHeight={50}
+      renderContainer={ListGroup}
+      renderItem={props => (
+        <ListGroup.Item {...props} className={`${props.className} articles-list__article-container`}>
+          <Article
+            bulkEditEnabled={bulkEditEnabled}
+            article={props.item}
+            onTagClick={onTagClick}
+            onTagRemove={tag => onTagRemove(props.item, tag)}
+            toggleArticleSelected={() => toggleArticleSelected(props.item)}
+            selected={!!selectedArticles[props.item.id]}
+        />
+        </ListGroup.Item>
+      )}/>
   );
 }
 

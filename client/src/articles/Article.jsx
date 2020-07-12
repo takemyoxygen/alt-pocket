@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import Tags from '../tags/Tags';
 import ArticleOperations from '../operations/ArticleOperations';
 import {MdCheckBoxOutlineBlank, MdCheckBox} from 'react-icons/md';
+import Form from 'react-bootstrap/Form'
 
 const Article = ({article, onTagClick, onTagRemove, bulkEditEnabled, toggleArticleSelected, selected}) =>
   <article className="articles-list__article">
     {bulkEditEnabled ? (
-      <div className="article-list__article__checked-icon" onClick={toggleArticleSelected}>
-        {selected ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
-      </div>
+      <Form.Check checked={selected} onChange={toggleArticleSelected} />
     ) : null}
 
     {article.tags && article.tags.length > 0 ?

@@ -6,7 +6,7 @@ const VirtualizedListItem = ({ children, top, height }) => (
   <div className="virtualized-list__item" style={{ top, height }}>{children}</div>
 )
 
-const VirtualizedList = ({ items, className, renderItem, itemHeight }) => {
+const VirtualizedList = ({ items, className, renderItem: Item, itemHeight, renderContainer: Container }) => {
   const [start, setStart] = useState(0);
   const [viewPortHeight, setViewPortHeight] = useState(null);
 
@@ -40,15 +40,14 @@ const VirtualizedList = ({ items, className, renderItem, itemHeight }) => {
   return (
     <div className={`virtualized-list ${className}`} onScroll={onScroll} ref={viewPortRef} style={viewPortStyle}>
       {viewPortHeight ? (
-        <div className="virtualized-list__container" style={{ height: items.length * itemHeight }}>
+        <Container className="virtualized-list__container" style={{ height: items.length * itemHeight }}>
           {items.slice(start, end).map((item, index) =>
-            <VirtualizedListItem
-              key={index}
-              top={(start + index) * itemHeight}>
-              {renderItem(item)}
-            </VirtualizedListItem>
+            <Item
+              item={item}
+              className="virtualized-list__item" style={{ top: (start + index) * itemHeight }}
+              key={index}/>
           )}
-        </div>
+        </Container>
         ) : null}
     </div>
   )

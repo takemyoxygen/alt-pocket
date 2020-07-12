@@ -33,19 +33,19 @@ const BulkOperations = ({ articles, readd, archive, unfavorite, favorite, addTag
   </div>
 );
 
-function toggleBulkAnd(inner) {
-  return (...args) => dispatch => {
+function toggleBulkAnd(inner, dispatch) {
+  return (...args) => {
     dispatch(actions.toggleBulkEdit());
     dispatch(inner(...args));
   }
 }
 
 export default connect(null,
-  {
-    archive: toggleBulkAnd(actions.archive),
-    readd: toggleBulkAnd(actions.readd),
-    favorite: toggleBulkAnd(actions.favorite),
-    unfavorite: toggleBulkAnd(actions.unfavorite),
-    remove: toggleBulkAnd(actions.remove),
-    addTags: toggleBulkAnd(actions.addTags)
-  })(BulkOperations);
+  dispatch => ({
+    archive: toggleBulkAnd(actions.archive, dispatch),
+    readd: toggleBulkAnd(actions.readd, dispatch),
+    favorite: toggleBulkAnd(actions.favorite, dispatch),
+    unfavorite: toggleBulkAnd(actions.unfavorite, dispatch),
+    remove: toggleBulkAnd(actions.remove, dispatch),
+    addTags: toggleBulkAnd(actions.addTags, dispatch)
+  }))(BulkOperations);

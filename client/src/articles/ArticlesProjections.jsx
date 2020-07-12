@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { throttle, find, pick } from 'lodash';
+import { throttle, find, pick, isPlainObject } from 'lodash';
 import PropTypes from 'prop-types';
 import { quickProjections, textFilter } from '../projections';
 import './ArticlesProjections.scss';
@@ -7,6 +7,10 @@ import { connect } from 'react-redux';
 import actions from './../actions';
 import Tags from './../tags/Tags';
 import BulkOperations from '../operations/BulkOperations';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 const ArticleProjections = ({
   projections,
@@ -20,6 +24,13 @@ const ArticleProjections = ({
   const [filterText, setFilterText] = useState('');
   const textProjectionRef = useRef();
   const tagProjections = projections.filter(p => p.type === 'tag');
+
+  const selectedQuickProjections = useMemo(
+    () => quickProjections
+      .filter(pr => projections.indexOf(pr) >= 0)
+      .map(pr => quickProjections.indexOf(pr)),
+    [projections]
+  );
 
   useEffect(() => {
     textProjectionRef.current = find(projections, p => p.type === 'text');
@@ -44,20 +55,35 @@ const ArticleProjections = ({
 
   return (
     <div className="articles-projections">
-      <div className="quick-projections">
-        {quickProjections.map(pr => {
-          const selected = projections.indexOf(pr) >= 0;
-          return (
-            <div
-              key={pr.title}
-              onClick={() => toggleQuickProjection(pr, selected)}
-              className={`articles-projections__projection ${selected ? 'articles-projections__projection--selected' : ''}`}
-            >
-              {pr.title}
-            </div>
-          )
-        })}
+      <div className="articles-projections__primary">
+        <InputGroup>
+          <InputGroup.Prepend>
+            <ToggleButtonGroup type="checkbox" value={selectedQuickProjections}>
+              {quickProjections.map((pr, index) => {
+                const selected = selectedQuickProjections.indexOf(index) >= 0;
+                return (
+                  <ToggleButton
+                    className="articles-projections__quick"
+                    variant="secondary"
+                    value={index}
+                    onChange={() => toggleQuickProjection(pr, selected)}
+                    key={pr.title}
+                  >
+                    {pr.title}
+                  </ToggleButton>
+                )
+              })}
+            </ToggleButtonGroup>
+          </InputGroup.Prepend>
+
+          <FormControl
+            placeholder="Filter by name"
+            value={filterText}
+            onChange={onFilterTextChange}
+          />
+        </InputGroup>
       </div>
+
 
       {tagProjections.length > 0 ? (
         <div className="tags-filter-projection">
@@ -68,15 +94,7 @@ const ArticleProjections = ({
       ) : null}
 
       <div className="text-filter-and-operations">
-        <div className="text-filter">
-          <input
-            type="text"
-            className="text-filter__input"
-            placeholder="Filter by name"
-            value={filterText}
-            onChange={onFilterTextChange}
-          />
-        </div>
+
       </div>
 
       {bulkEditEnabled ? (

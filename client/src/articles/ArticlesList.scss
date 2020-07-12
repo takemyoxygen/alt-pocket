@@ -9,18 +9,20 @@
   cursor: pointer;
   flex: 1 1 auto;
 
+  &__article-container {
+    &:hover {
+      z-index: 100;
+      box-shadow: 0 5px 5px #dadce0;
+    }
+  }
+
   &__article {
     display: flex;
     align-items: center;
-    height: 40px;
     align-items: stretch;
 
     .tags-container:not(:empty) {
       margin-right: 8px
-    }
-
-    &:hover {
-      box-shadow: inset 0 1px 1px #dadce0, 0 2px 2px #dadce0;
     }
 
     &__title-link-container {
@@ -36,12 +38,6 @@
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-    }
-
-    &__checked-icon {
-      padding: 4px 4px 4px 0;
-      display: flex;
-      align-items: center;
     }
 
     .operations-container {
