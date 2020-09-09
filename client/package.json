@@ -19,8 +19,10 @@
     "sass": "^1.25.1-test.1"
   },
   "scripts": {
-    "start": "parcel ./src/index.html",
-    "build": "parcel build ./src/index.html"
+    "start": "concurrently -k -p \"[{name}]\" -n \"app,sw\" \"parcel ./src/index.html\" \"parcel watch ./src/serviceWorker.js\"",
+    "build": "npm run build:app && npm run build:sw",
+    "build:app": "parcel build ./src/index.html",
+    "build:sw": "parcel build ./src/serviceWorker.js"
   },
   "browserslist": [
     "last 2 chrome versions",
@@ -28,6 +30,7 @@
     "last 2 safari versions"
   ],
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "serve": "^11.3.2"
   }
 }
