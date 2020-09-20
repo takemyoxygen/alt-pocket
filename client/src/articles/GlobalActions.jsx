@@ -1,15 +1,25 @@
 import React from 'react';
-import {FaPencilAlt, FaSignOutAlt, FaSyncAlt, FaCloudDownloadAlt} from 'react-icons/fa';
+import {FaPencilAlt, FaSignOutAlt, FaSyncAlt, FaCloudDownloadAlt, FaArchive, FaPlus} from 'react-icons/fa';
 import {connect} from 'react-redux';
 import actions from '../actions';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import './GlobalActions.scss';
+import {values} from 'lodash';
+import {unread as unreadProjection} from '../projections';
 
-const GlobalActions = ({bulkEditEnabled, onBulkToggled, sync, reloadAll, logout}) => (
+const GlobalActions = ({bulkEditEnabled, onBulkToggled, sync, reloadAll, logout, unread, recentlyAdded, recentlyRead}) => (
   <Navbar bg="light" variant="light" className="header">
     <Navbar.Brand className="mr-auto">Alt. Pocket</Navbar.Brand>
+    <Navbar.Text className="header__stats">Unread: {unread}</Navbar.Text>
+    <Navbar.Text className="header__stats">
+      Last 7 days:
+      <FaPlus className="text-success"/>
+      {recentlyAdded}
+      <FaArchive className="text-primary"/>
+      {recentlyRead}
+    </Navbar.Text>
     <Nav>
       <NavDropdown title="Actions" id="basic-nav-dropdown">
         <NavDropdown.Item onClick={onBulkToggled} className="header__action">
@@ -33,9 +43,15 @@ const GlobalActions = ({bulkEditEnabled, onBulkToggled, sync, reloadAll, logout}
   </Navbar>
 )
 
+const weekAgo = new Date();
+weekAgo.setDate(weekAgo.getDate() - 7);
+
 export default connect(
   state => ({
-    bulkEditEnabled: state.bulkEdit.enabled
+    bulkEditEnabled: state.bulkEdit.enabled,
+    unread: values(state.articles).filter(unreadProjection.filter).length,
+    recentlyAdded: values(state.articles).filter(article => article.addedAt >= weekAgo).length,
+    recentlyRead: values(state.articles).filter(article => article.archivedAt >= weekAgo).length
   }),
   {
     onBulkToggled: actions.toggleBulkEdit,

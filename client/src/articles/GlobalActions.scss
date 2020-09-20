@@ -7,4 +7,17 @@
       margin-right: 8px;
     }
   }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin: 0 2px 0 6px;
+    }
+
+    &:not(:last-child) {
+      margin-right: 12px;
+    }
+  }
 }
